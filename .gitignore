@@ -1,0 +1,15 @@
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+_build/
+latex.out/
+# Optional: ignore PDFs if they’re large; remove this line if you want PDFs tracked
+*.pdf
