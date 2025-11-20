@@ -183,7 +183,7 @@ report, throw them into an appendix. Be sure to include captions and text to sup
 \fancyhf{}
 \fancyhead[]{\nouppercase{\rightmark\hfill\leftmark}}
 %\fancyhead{} % will clear the headers
-\fancyfoot[R]{Author Last Name, \today}
+\fancyfoot[R]{Cooper, \today}
 % start page numbering for main text
 \clearpage
 % Adjust chapter title formatting
@@ -209,21 +209,38 @@ report, throw them into an appendix. Be sure to include captions and text to sup
 % Please include an Executive Summary for your final project:
 \chapter*{Executive Summary}
 \addcontentsline{toc}{section}{Executive Summary}
-The Executive Summary  should be written in plain language that your client will read.  This part of the document is for the non-technical reader, aka your client. The Executive Summary should describe 
-\begin{itemize}
-    \item the client 
-    \item the problem
-    \item relevant problem background information
-    \item the project objectives
-    \item the method or approach taken to solve the problem, including design steps, math model, and numerical method
-    \item the modeling results
-    \item the economic results (if pursuing an A grade in the project)
-    \item the results of the sensitivity analysis
-    \item the key conclusions and recommendations based on results and sensitivity analysis
-\end{itemize}
-All should also be reported in nontechnical language.  Figures and tables can be included in this section and they can be repeated again later in the document where relevant.  
 
-A common error in the Executive Summary is to fail to present the specific results and specific recommendations.  
+Summit Rotorcraft Systems (SRS), a helicopter manufacturer, is in the analysis stage of a new prototype. The analysis is being led by Jason Cowper,
+the lead engineer on the prototype team, prior to testing stages. A critical component in the prototype analysis is the confirmation that its
+predicted operational performance complies with the rigorous safety policies of the Federal Aviation Administration (FAA).
+
+A primary performance threshold of the rotorcraft that must be measured is its minimum vertical rate of climb (VROC). Maintaining VROC above
+this minimum, or critical, value ensures that the rotorcraft can maintain a safe level of maneuvarability. VROC decreases as altitude
+increases, which implies that critical VROC is the detemining factor for the maximum safe altitude the rotorcraft can operate at. This
+maximum altitude is known as a rotorcraft's service ceiling.
+
+Jason Cowper is requesting a computational model that can predict the service ceiling of the new rotorcraft protoype. This model will
+calculate the prototype's service ceiling, as well as the time that will elapse to dynamically approach this service ceiling, named as 
+time-to-climb (TTC).
+
+The model will first receive inputs of the protoype helicopter's specifications developed by SRS. It will then utilize known International
+Standard Atmosphere (ISA) parameters to calculate density, required turbine power, and available turbine power, all varying with altitude.
+It will then use these calculations to determine a steady state VROC which can be utilized for climb dynamics.
+
+The climb dynamics algorithm will be solved by the Runge-Kutta-Fehldberg method to generate a set of altitudes, with corresponding
+VROC values, which vary with time. The service ceiling will be determined by finding the altitude that has a corresponding VROC that has
+decreased to the critical rate value determined for this rotorcraft. The TTC corresponding with service ceiling is also found from this
+service ceiling determination.
+
+The computational model determined a service ceiling, based on prototype specifications, to be a maximum altitude of 5118 meters, or 16791 feet.
+The dynamic TTC to approach this service ceiling, is determined to be 24.4 min.
+
+The service ceiling and TTC measurements were observed to be highly sensitive to the variance of sea-level turbine power and rotor size.
+Percent differences are identical between variance of power and rotor size.
+
+The resultant service ceiling and TTC are determined to be appropriate performance measurements for the new rotorcraft prototype. It is
+recommended to continue with development plans of the prototype using current specifications.
+
 
 \newpage
 % optional: You could include an Acknowledgements section where you acknowledge those that have assisted you. 
