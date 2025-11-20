@@ -325,42 +325,48 @@ This section will outline the mathematical equations and strategies used to comp
 The solution approach, math model, and numerical method will all be discussed.
 
 \section{Overview of Approach}
+The approach to solve for surface ceiling and TTC will begin with the input of rotorcraft specifications and ISA parameters \cite{ISA}.
+The second order climb dynamics ODE will then be developed using density, available power, required power, induced velocity,
+and steady state VROC, which all vary with altitude. The ODE is then solved with the RK45 method, and the altitude measured at the
+critical VROC is obtained for the final result, as well as the corresponding time. A sensitivity analysis is then conducted
+to observe service ceiling sensitivity to turboshaft power.
 
-Provide an overview of the approach, but not a lot of detail. Use the sections below to provide more detail. 
 \section{Math Model}
-Be sure to include some math here.  Refer to your equations by equation number.  Be sure to use the \LaTeX \begin{verbatim}
-    \ref
-    \label
-\end{verbatim} commands to keep track of Equation numbers for your report so you do not have to. For example, Eqn.~\ref{eq:line} is the equation for a line. Use these same commands to refer to figures and tables as well as specific appendices and sections.  
-\begin{equation}
-    \label{eq:line}
-    y = mx+b
-\end{equation}
-where\\
-\indent $y$ is the dependent variable $(\mathrm{\frac{some}{units}})$\\
-\indent $m$ is the slope $(\mathrm{\frac{some}{units}})$\\
-\indent $x$ is the independent variable $(\mathrm{\frac{some}{units}})$, and \\
-\indent $b$ is the $y$-intercept $(\mathrm{\frac{some}{units}})$.
 
-For ASME format, use Egn. or Fig. to refer to specific equations or figures, unless you start the sentence with a reference to a figure or table.  In that case you would use the word Figure or Equation as in "Equation~\ref{eq:line}
-is the equation of a line."
-When you refer to math symbols within a sentence, be sure to use math text.  For example, you would refer to the slope $m$ in Equation~\ref{eq:line}.  You would not refer to the slope m.  Be sure to also show units with your equation definitions and in your text using the format presented in Eqn.~\ref{eq:line}.
+\begin{equation} \label{eq:temp}
+    \mathrm T(h)=T_0+Lh
+\end{equation}
+
+\begin{equation} \label{eq:density}
+    \mathrm \rho(h)=\rho_0(\frac{T(h)}{T_0})^{-\frac{g}{LR}-1}
+\end{equation}
+
+\begin{equation} \label{eq:vi}
+    \mathrm v_i(h)=\sqrt{\frac{W}{2A\rho(h)}}
+\end{equation}
+
+where: vi = sea level hover induced velocity
+
+\begin{equation} \label{eq:P_a}
+    P_a(h)=\eta P_{SL}(\frac{\rho(h)}{\rho_0})^\alpha
+\end{equation}
+
+\begin{equation} \label{eq:P_r}
+    \mathrm P_r(h)=p_fWv_i(h)
+\end{equation}
+
+\begin{equation} \label{eq:roc}
+    \mathrm v_{ss}(h)=\frac{P_a(h)-P_r(h)}{W}
+\end{equation}
+
+\begin{equation} \label{eq:ode}
+    \mathrm \tau\frac{d^{2}h}{dt^{2}}+\frac{dh}{dt}=v_{ss}(h)
+\end{equation}
+
 \section{Numerical Methods}
 If you only present one numerical method here, be sure to change the name of this subsection.  Often you may already have most of this section written as a part of one of your lab assignments.  
 
 A mistake people make in this section is they forget to move their justification for the numerical method choice up to the Background section. 
-
-\section{Economic Model and Method - Required if seeking an A on the report}
-Your client will be interested in an economic analysis.  Be sure to describe the method by which the analysis is completed here.  If you are using some sort of economic analysis that incorporates the time value of money, be sure to present those mathematics.  Try to avoid variable names that are multiple letters.  For example $p$ is preferred over $presentval$.
-
-If it is challenging to find an appropriate economic analysis, then please be sure to check in with your instructor for help.  Please avoid waiting until the last minute.
-
-Some examples of economic models include:
-\begin{itemize}
-    \item payback period for an investment (e.g. PV systems)
-    \item compare and contrast the costs and benefits of two alternatives 
-    \item time value of money of an investment or a cost
-\end{itemize}
 
 \section{Sensitivity Analysis Methodology}
 You are required to complete a sensitivity analysis.  Be sure to check in with your instructor about the design of your sensitivity analysis so that your document meets the requirements of passing the class. The sensitivity analysis could be completed on the math model, the numerical method or the economic model or some combination of all three.
