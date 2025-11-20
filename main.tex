@@ -258,49 +258,29 @@ behavior model for basic predictions. These predictions can be extremely valuabl
 \setcounter{page}{1} % set the page number appropriately
 
 \chapter{Introduction}
-Provide text here telling the reader what is in the Introduction Section.  Avoid having headers without text in between. 
+The Introduction Section provides an overview of the problem, with relevant objectives and reasoning for solving.
 \section{Overview of the Problem} 
-Provide an overview of the problem.  Provide at least one paragraph describing only the problem.  Another optional and separate paragraph can provide an overview of the solution approach.
-\section{Objectives} 
-I encourage you to number your objectives and maybe give them short names.  In your Results, Discussion and Conclusion Sections, you can then refer to the objectives that you have completed. For example...
+Summit Rotorcraft Systems (SRS) is a helicopter manufacturer developing a new model prototype. This prototype is required to
+adhere to the rigorous performance regulations enforced by the Federal Aviation Administration (FAA). A primary performance
+measurement that the prototype must satisfy is the minimum, or critical, vertical rate of climb (VROC) requirements. This critical
+VROC will be the determining factor for the service ceiling of the rotorcraft. Jason Cowper, the lead engineer of the SRS prototype
+team, is requesting a computational model that can calculate the service ceiling of the new rotorcraft.
 
+\section{Objectives} 
 The following objectives are addressed in this report:
 \begin{enumerate}
-    \item \textit{Good Name Here} Describe this objective
-    \item \textit{Another Good Name Here} Describe this objective too
-    \item \textit{Even Another Good Name Here} Describe this objective as well
+    \item \textit{Steady State VROC} Determine steady state VROC as a function of altitude.
+    \item \textit{First Order ODEs} Determine first order ODEs from the second order climb dynamics ODE.
+    \item \textit{Altitudes and VROCs} Use the Runge-Kutta-Fehldberg method to find altitude and VROC values that change with time.
+    \item \textit{Service Ceiling} Determine service ceiling from VROC and altitude results.
+    \item \textit{Dynamic TTC} Record the corresponding TTC from elapsed time to reach service ceiling.
 \end{enumerate}
 
-Another way to format this list would be as follows.  You choose your preferred approach.
-\begin{description}
-    \item[Objective 1 Good Name Here]Describe this objective
-    \item[Objective 2 Another Good Name Here] Describe this objective
-    \item[Objective 3 Even Another Good Name Here]  Describe this objective as well
-\end{description}
+\section{Motivation}
 
-Later, in your Results section you can say something like... "Objective 1: Good Name Here was addressed by something and the results are shown in Figure SomeNumber.
-
-Your final grade is based on how well your results, recommendations and conclusions address the original problem you present in the beginning of your document. 
-\section{Importance of Solving the Problem or Motivation - you choose}
-The rest of the document, other than the Executive Summary, is written for a technical audience.  However, you want to focus on clear and concise language, rather than proving how much technical jargon you can use.
-
-The entire Introduction Section should be about one to two pages and provide a broad overview of the problem and project objectives.  You will provide more detail about your problem in the Background Section.  You can use the same subsections as in the Lab Report, with some expansion. For example, pictures or project diagrams are encouraged in the project report Introduction and Background Sections. 
-
-One way to think about what you are writing for your technical reader (another engineer) is to convert your  section information needs into  questions. You then answer them.  Below are some questions to consider for writing the introduction.
-\begin{itemize}
-    \item  What is the general problem you are addressing, and why is the general sort of problem 
-important or interesting to solve? 
-\item What figures could help describe problem?
-\item What are the goals/objectives you intend to obtain?
-\item How have others solved it? (You will answer this question in the Background Section which will be a miniature Literature Review section. Provide at least one case study if possible. 
-\item What is the specific problem you mean to solve?
-\item What is the method you will use to solve the problem?
-\item Why is it important to solve the design problem?
-\item What are your expected final outcomes from your analysis? 
-\item Has anything changed recently (meaning, say, the last 20 years) that makes your particular problem more relevant or worth solving? 
-\item If your project is successful, what will be the lasting effect of your efforts? 
-\item What is the structure of the report? Be sure to list all main sections as listed in the Table of Contents
-\end{itemize}
+The use of this developed computational model is not exclusive to the SRS prototype. The specifications of any helicopter can be used in the
+model to predict a unique service ceiling and dynamic TTC. This model is simple enough to efficiently calculate these values in a short time
+period, while still being accurate enough for a strong prediction for future live testing.
 
 \chapter{Background} 
 Provide text here telling the reader what is in the Background Section.  Avoid having headers without text in between. 
