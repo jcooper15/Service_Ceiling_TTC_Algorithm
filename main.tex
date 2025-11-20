@@ -295,31 +295,35 @@ must never decrease to, so a service ceiling must be determined to ensure this n
 computational model that can determine this altitude threshold, as well as a time-to-climb (TTC) measurement to this altitude.
 
 \section{Case Studies or Relevant Literature}
+Much of the fundamental formulas required to solve for induced velocity, required power, available power, and rate of climb are
+referenced from the publications of J. Gordon Leishman \cite{helidyn}.
 
+In order to develop realistic prototype rotorcraft specfications, existing light helicopters are referenced to ensure the
+prototype is a feasible design. The MD Helicopters MD500 is a prime example of a powerful light duty helicopter that has a
+public database of its basic specifications that can be referenced \cite{md500}.
 
-\section{Method Options and Justification - update for your problem}
-In your ENGR 326 class lab reports you do not provide a lot of background information, other than mention what other numerical methods can be used to solve the problem.  However, for this formal technical report, you want to be sure to provide some background information to the reader.  The purpose of conveying this information is to demonstrate that you know what you are talking about, because you have a good understanding of your client and the problem setting and that you have reviewed prior instances of solving similar problems.  Thus, you are not remaking the wheel, but rather building on that knowledge and possibly, when doing research, adding to that knowledge.
-Your background section should address these questions.
-\begin{itemize}
-        \item What is known about the your problem situation?
-        \item What is the rationale of your work?
-        \item What previous work informs your work?
-        \item What data sources inform your work?
-        \item What is known about your problem solution approach (aka method)?  Typically, you will not present mathematics here, unless necessary.
-        \item Why choose your approach over another?  
-    \end{itemize}
-As part of the background section, you should refer to at least five (5) different high quality sources. Avoid presenting the title of a reference.  Just cite it.  For example, do not use text such as... "As discussed in the textbook  \textit{Applied Groundwater Modeling: Simulation of Flow and Advective Transport}...".  Instead, just cite the text.  For example, "The Poisson Equation can be used to determine the hydraulic heads in a groundwater well field \cite{anderson2015applied}."
-\subsection{Math Model - Be specific}
-If you considered other possible math models, this is the section where you would mention those other possible math models and justify your choice of the math model that you present in the Methods chapter.
-\subsection{Numerical Methods - List purpose (e.g. Integration or ODE Solver)}
-In this section you are focused on telling the reader about other numerical methods you could have used, but did not.  You can start with that the math model you solve  must be solved numerically. You had options for numerical methods, below are the ones you did not use. You do present the one you did use in the methods section. This information will likely come from your Lab 1 or Lab 2 report's Method section. 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Most fundamental calculations in the computational model require the basic atmospheric parameters published by International
+Standard Atmosphere (ISA) \cite{ISA}. These parameters are essential for effective helicopter performance modeling.
+
+\section{Method Options and Justification}
+The math model developed for this project, as well as the numerical method used, have been determined to be the most effective
+out of all possibilities.
+
+\subsection{Math Model}
+The math model utilized in this project is not one that can be altered. Due to the the experimentally calculated parameters and
+specifications provided by SRS, there is only one path to determine service ceiling. The required functions of air density,
+required power, available power, and induced velocity are essential to make up the math model.
+
+\subsection{Numerical Methods}
+The Runge-Kutta-Fehldberg method, or the RK45 method, is the most effective way to solve the second order climb dynamics ODE.
+The RK45 method is very effective for non stiff ODEs, due to its stability from adaptive step size \cite{fehlberg,dormandprince}.
+Other options, such as the RK4 method, are less reliable due to the fact that they do not have an adaptive step size, which
+may result in lower stability.
+
 \chapter{Methods} 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Provide text here telling the reader what is in the Methods Section.  Avoid having headers without text in between. 
+This section will outline the mathematical equations and strategies used to complete the service ceiling and TTC calculations.
+The solution approach, math model, and numerical method will all be discussed.
 
-The methods section will be similar to your course lab reports and you are welcome to copy and paste your own work into this report.  Be sure to edit appropriately. However, your justification for your solution approach is addressed in the Background section above.   If you are interested in earning an A on your final report, Unlike your lab reports, you will include a section on how you will evaluate your problem solution economically.  Remember that this section only discusses theory.  Any specifics about your application (e.g. parameter values or input data) are presented later in the Applications Section.  
 \section{Overview of Approach}
 
 Provide an overview of the approach, but not a lot of detail. Use the sections below to provide more detail. 
@@ -611,362 +615,6 @@ Appendices can be included for
     \item Notation
     \item Supplemental information
 \end{itemize}
-The appendices below include examples and information to help with the development of a document.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% REMOVE THIS NEXT SECTION TOO
-\chapter{Checklists}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-For full credit for each category, strive to answer yes and check each box on these lists.
-\section{Required Accomplishments}
-\begin{itemize}
-\item[$\square$]Are your results correct?  Your results on your final project must be correct to pass the class. 
-
-\item[$\square$]Is your sensitivity analysis correct?  Your final project sensitivity analysis must be correct to pass the class.
-
-\item[$\square$]Does your submitted code provide the results submitted in your document?  Your results, including your sensitivity analysis must match your report to pass the class. 
-
-\end{itemize}
-\section{Title Page}
-\begin{itemize}
-    \item[$\square$] Is the problem in the title?
-    \item[$\square$] Is the solution approach in the title?
-    \item[$\square$]Would you like this title on your resume?
-    \item[$\square$] Does your title sound like engineering or science?  Engineers solve problems, while scientists study problems.
-    \item[$\square$] Do you include your client's name, their title within their organization and the organization's name?
-    \item[$\square$] Do you include your name on the title page?  You may include your own fictitious title and organization if you choose.  
-\end{itemize}
-\section{Front Matter}
-\begin{itemize}
-\item[$\square$] Did you check through your table of contents and verified all required sections are there?
-\item[$\square$] Are your captions complete in your List of Figures and List of Tables? The reader will skim your captions here in the List of Figures and List of Tables to understand what your report is about and decide what part to review.
-\item[$\square$] Did you verify that all your Appendices show in the Table of Contents?
-\item[$\square$] Did you verify that there is no extra content in your Table of Contents?
-\end{itemize}
-\section{Executive Summary}
-\begin{itemize}
-    \item[$\square$] Are the problem and the client identified in their own paragraph or two?
-    \item[$\square$]  Is the solution approach outlined in its own paragraph?
-    \item[$\square$]Are the objectives identified?
-    \item[$\square$] Are the math model and the numerical methods identified?
-    \item[$\square$] Are main results from math model runs, optional economic model runs and required sensitivity analysis reported?  Often a separate paragraph for each result or a bulleted list for these separate results is easier to follow.  These results are easier to follow if they are presented as responses to or part of the project objectives. 
-    \item[$\square$] Are recommendations reported include focused recommendations from results and the sensitivity analysis? (Avoid using broad recommendations generated from AI that are not related to the project directly.
-   \item[$\square$] Optional: Do your  recommendations include future work?
-   \item [$\square$]  Is everything you reported in your Ex. Summary also in your report?  Nothing new should be reported in the Ex. Summmary and it is perfectly fine to copy and paste parts of the report into your Executive Summary. 
-    \item[$\square$] Did you avoid using citations in your Executive Summary? In most cases, you should not include citations in an executive summary as it is meant to be a concise overview of the key points from a larger document, and adding citations can clutter the text and detract from the summary's readability; however, if you are citing specific data or particularly important research findings, you can include brief source attributions without overloading the summary with citations.  You might include citations when: 1) presenting critical data, 2)academic or publisher requirements, 3) highly sensitive or controversial topics. 
-\end{itemize}
-\section{Figures}
-\begin{itemize}
-    \item[$\square$] Are all your figure captions on the bottom of your figures and cite the source of the figure?    \item[$\square$] Do you choose colors that are compatible with those that are color blind?  (See the color pallets at the bottom of \href{https://davidmathlogic.com/colorblind/#%23005AB5-%23DC3220}{this page}. \item[$\square$] Does your figure go to the edge of the margins, but not into the margins?  A common error students make is putting in figures that are too small.  Use the space - really.  
-    \item[$\square$] Is the font on your figure no smaller than 9pt?  You may have to make your figure bigger or you may need to make your axes and legend labels with larger font.
-    \item[$\square$] Is the figure referred to by figure number in the text and discussed in the text? (No figure or table or appendix should be in a document without being referred to by number and discussed in the text). 
-     \item[$\square$] Did you use \LaTeX command "ref" for all figure references?  That way, when you add new figures at the beginning of your document (which is a way to polish the Background Section) your references to your results do not get mixed up.  Your code would be something like \begin{verbatim} Figure~\ref{fig:ProjectLocation} \end{verbatim} You will need to be sure to label your figures using the label command and never type a figure number, but always use the ref command. 
-    \item [$\square$] Do you capitalize your label for your figure (e.g. "Figure 1" (ASCE) or "Fig. 1" (ASME) is used vs. "figure 1" or "fig. 1") when you refer to your figure in the text.
-    \item [$\square$] When you refer to your figure, do you just add it at the end of the sentences such as (Figure 1) for ASCE or (Fig. 1) for ASME? Do you avoid complete sentences that say something like "Figure 1 shows the Google Map of the project location" and instead use "The project is located in Northern California (Figure 1) (ASCE) or (Fig. 1) (ASME)." 
-    \item[$\square$] Does the caption summarize the "take home" message of the figure?
-    \item[$\square$] Are both axes labeled and use \LaTeX~for math symbols and fractional units and are \LaTeX~symbols used in the caption and legend when appropriate?
-    \item[$\square$] Is there no title on the figure?
-    \item[$\square$] Does the legend provide clear information and use appropriate units and symbols, using \LaTeX~when appropriate?  When presenting results of differential equations, the initial conditions should be presented carefully. 
-    \item[$\square$] Is the figure exported in a manner that the figure is of high quality in the document?  Did you save your figure as a file and not use a screenshot? See \href{https://stackoverflow.com/questions/16183462/saving-images-in-python-at-a-very-high-quality}{https://stackoverflow.com/questions/16183462/saving-images-in-python-at-a-very-high-quality} 
-    \item[$\square$] Have you avoided to putting any Excel screen shots into your document? You can easily insert figures or tables of data using the Overleaf Visual Editor.
-
-\end{itemize}
-\section{Tables}
-\begin{itemize}
-    \item[$\square$] Are all table captions on the top?\item[$\square$] Do you try to keep the font the same size for all tables and keep the font no smaller than 9pt?
-         
-    \item[$\square$] When making your table, did you place the symbol in the left column, the definition in the middle column, and the value on the right column and include the units? 
-         \item[$\square$]  Does your table caption cite the source of values or refer to relevant equations or figures by number?
-          \item[$\square$] If your table has parameter values from many sources, did you include a column with citations of sources for each value?
-        \item[$\square$] Does your table stay in  the margins, and not go into the margins?  
-        \item[$\square$] Do you generally center columns that have symbols in them, left justify columns that have text and right justify columns that have numbers?
-        
-        
-    \end{itemize}
-\section{Mathematics}
-    \begin{itemize}
-        \item[$\square$] Did you define all symbols the first time they are introduced, including any appropriate units? 
-        \item[$\square$] Do you avoid using italics for your units?  See the example of how to present units in the template using the mathrm command.
-        \item[$\square$] Did you use symbols consistently throughout your document? 
-        \item[$\square$] Do you define a clear symbol for an important result (e.g. $R$ vs $R^*
-        $ or  initial condition (e.g. $R(t=0)$ vs $R_o$
-        \item[$\square$] Did you refer to each equation by number in the text?
-        \item[$\square$] Does each of your equations have a citation to provide the source? If you do not provide a citation, then you are saying that you developed the equation or the equation is common knowledge.
-        \item[$\square$] Did you capitalize Equation each time you refer to the equation, as in "Equation 3" (ASCE) or "Eqn. 3" (ASME) because in this case "Equation 3" or "Eqn 3" is a label?      
-        \item[$\square$] Do you avoid using bullets as part of your symbol definitions?
-        \item[$\square$] If there are multiple equations in your model, do you present them together so it is easier to see how the equations interact?
-    \end{itemize}
-\section{Introduction}
-    \begin{itemize}
-        \item[$\square$] Do you have a single sentence that provides an outline of the section, mentioning the different section headings as part of the outline? 
-    \end{itemize}
-\subsection{Overview of the Problem}
-    \begin{itemize}
-        \item[$\square$] Do you have at least one paragraph that focuses only on the problem and not the solution approach?  If you want, you may add an additional and smaller paragraph that outlines the solution approach.  This section is mostly about the problem, not the solution. 
-        \item[$\square$] Try to avoid introducing symbols in this section, but if you do introduce symbols, do you carefully define them? 
-        \item[$\square$] Do you include citations to support assertions of fact? 
-    \end{itemize}
-\subsection{Objectives}
-    \begin{itemize}
-        \item[$\square$] Do you introduce the list of objectives with a sentence?  
-        \item[$\square$] Does your list of objectives have parallel construction?
-        \item[$\square$] Do you leave program verification OUT of the list as program verification is good practice and expected, so this task does not need to be an objective? 
-        \item[$\square$] Try to avoid introducing symbols in this section, but if you do introduce symbols, do you carefully define them? 
-        \item[$\square$] Do your project objectives include an economic objective if you choose to include an economic analysis?
-        \item[$\square$] Is your last objective a sensitivity analysis?  Remember, you could do the sensitivity analysis on your economic model. 
-    \end{itemize}
-\subsection{Importance of Solving the Problem}
-    \begin{itemize}
-        \item[$\square$] Do you have at least one paragraph that focuses only on the problem and not the solution approach?  If you want, you may add an additional and smaller paragraph that discusses the solution approach.  This section is mostly about the problem, not the solution. 
-        \item[$\square$] Try to avoid introducing symbols in this section, but if you do introduce symbols, do you carefully define them? 
-        \item[$\square$] Do you include citations to support assertions of fact? 
-    \end{itemize}
-\section{Background}
-\begin{itemize}
-        \item[$\square$] Do you have a single sentence that provides an outline of the section, mentioning the different section headings as part of the outline? 
-        \item[$\square$] Do you use mostly present and past tense and just about no future tense?  Your reader will read this section after the project is completed. So write this section with the completion in mind.
-        
-    \end{itemize}
-\subsection{Client Background}
-\begin{itemize}
-        \item[$\square$] Do you identify a person by name and explain their role as it relates to your project in this section? 
-    \end{itemize}
-\subsection{Problem Situation}
-\begin{itemize}
-        \item[$\square$] Do you describe the problem? 
-        \item[$\square$] Do you describe the goal of the solution to the problem? 
-        \item[$\square$] Do you describe the constraints of the problem? 
-        \item[$\square$] Do you include criteria that are used to compare potential solutions over others?
-        \item[$\square$] Do you have sources for all statements of fact?  (If you require fictional sources, please talk with your project supervisor).
-    \end{itemize}
-\subsection{Relevant Literature and/or Case Studies}
-\begin{itemize}
-     \item[$\square$] Do you have sources for all statements of fact?  (If you require fictional sources, please talk with your project supervisor).
-     \item[$\square$] Do you review relevant literature and/or present at least one releavnt case study? 
-\end{itemize}
-\subsection{Method Options and Justification}
-\begin{itemize}
-        \item[$\square$] Do you summarize what possible math models could have been used?
-        \item[$\square$] Do you summarize what possible numerical methods could have been used?  In this section you will likely use information from your previous lab report that summarize the other numerical methods that could have been used. 
-        \item[$\square$] Optional: Do you summarize other possible economic models you could have used? 
-        \item[$\square$] Do you have sources for all statements of fact?  (If you require fictional sources, please talk with your project supervisor).
-    \end{itemize}
-
-\section{Methods}
-    \begin{itemize}
-        \item[$\square$] Do you have a single sentence that provides an outline of the section, mentioning the different section headings as part of the outline? 
-    \end{itemize}
-\subsection{Approach to Solving the Problem} 
-\begin{itemize}
-    \item[$\square$] 
- Did you start with the general description of math model before going on to a general description of the numerical method used to address the problem?  You do not need to mention that you used Python here.
- \item[$\square$] Do you avoid referring to equations that have not yet been introduced?
-\end{itemize}
-\subsection{Math Model}
-    \begin{itemize}
-        \item[$\square$]  Is the equation referred to by an equation number in the text and discussed in the text, e.g. Fig. 1 ? (No equation, figure, table or appendix should be in a document, without being referred to by number and discussed in the text). 
-        \item[$\square$] Is each equation carefully supported with citation(s)?  Otherwise, the author is saying that they developed the equation or the equation is common knowledge. 
-         \item[$\square$] Does the narrative supporting the math model clearly identify which values are input variables vs output variables and which values are parameters? Are independent vs dependent variables identified?  
-         \item[$\square$] Are initial conditions and boundary conditions discussed when appropriate? 
-         \item[$\square$] Are all items under Equations addressed?
-         \item[$\square$] Did you avoid presenting parameter values in this section?  This section is only for theory.  The Application Section is where you present parameter values. You may refer to a future table of that section if you like.
-    \end{itemize}
-\subsection{Numerical Method(s)}
-    \begin{itemize}
-        \item[$\square$] Did you start with an overview of the section?  This section is large so it helps to provided the reader a roadmap.
-        \item[$\square$] Did you start by stating what method you used and describing how the method works mathematically as well as its strengths and weaknesses?
-        \item[$\square$]Did you present the associated math equations that describe the chosen method?
-       \item[$\square$] Did you discuss the other methods that were considered and why they were not chosen in the background section?  You do not need to present the equations for these methods that were considered, but not used.
-       \item[$\square$] Did you present mathematically all numerical methods that were used in your code and justify their use as listed above?
-        \item[$\square$] Do you avoid referring to code or citations of code in this section?  This section is for theory only. 
-        \item[$\square$] Do you use a separate paragraph for each idea?  For example do you have a paragraph that discusses adaptive step size separately from introducing a method?
-    \end{itemize}    
-\subsection{Optional Economic Model}
-    \begin{itemize}
-        \item[$\square$] Do you want to earn a grade of an A on your final report?  Then you should complete an economic model.  
-        \item[$\square$] Do you provide at least one math equation used in your economic model?
-        \item[$\square$] Does your explanation provide guidance for replicating your economic model calculations with no references to results?
-    \end{itemize}    
-\subsection{Sensitivity Analysis}
-    \begin{itemize}
-        \item [$\square$] Do you clearly define the dependent variable of the sensitivity analysis?  This value will be sensitive to changes in the independent variable.  The dependent variable should be based on one of your main recommendations to your client.  How sensitive is your recommendation to your model parameters?
-        \item [$\square$] Did you clearly define the independent variables of the sensitivity analysis?  These values are often parameter values of the math model. 
-        \item [$\square$] Did you clearly define what percent change will occur in the independent variable of the sensitivity analysis? 
-    \end{itemize}
-\section{Application}
-    \begin{itemize}
-        \item[$\square$] Do you have a single sentence that provides an outline of the section, mentioning the different section headings as part of the outline? 
-    \end{itemize}
-\subsection{Parameters}
-\begin{itemize}
-\item[$\square$] Are you clear what the difference is between a math model parameter, variable, initial condition and/or boundary condition?  If not, check in with your instructors or tutors.
-\item[$\square$]   Do you clearly present all math model values in a table so that your results could be replicated?
-\item[$\square$] Did you use separate paragraphs to explain each table?
-\item[$\square$] Do you clearly document sources that informed the values of your math model and economic model parameters?
-\item[$\square$]   Do you clearly present all numerical methods values in a table so that your results could be replicated?  Please know that some of these values might be default values that you should find in code documentation and report in your document. 
-\item[$\square$] For numerical methods, are parameter values for convergence provided (even if default values) so someone could replicate your results?
-\item[$\square$] For numerical methods, do you cite the source of any code you did not develop yourself?
-
-\end{itemize}
-\subsection{Code Outline}
-\begin{itemize}
-\item[$\square$] Do you explain how your code works? If a root-finding method is used, what does the root represent within the problem?  
-\item[$\square$] Did you cite sources of your code?  For example if you used scipy, google how to cite scipy \href{https://scipy.org/citing-scipy}{https://scipy.org/citing-scipy}
-\end{itemize}
-\subsection{Model Runs}
-\begin{itemize}
-        \item [$\square$] Did you present your model runs as a bulleted list?  
-        \item [$\square$] Did you start with model verification and refer to the appendix that has the model verification information? 
-        \item[$\square$]Did you avoid describing the verification process in the main document and only describe the process in the appendix?
-        \item [$\square$] Did you consider organizing your model runs similarly to your objectives from the introduction?
-        \item[$\square$] Did you use a bulleted list to describe your model runs? 
-        \item[$\square$]When referring to Appendices do you just include the reference as the end of the sentence as in "Code verification is available in Appendix I." or "Model runs were completed to verify the numerical method program (Appendix I) 
-    \end{itemize}
-\section{Results and Discussion}
-   \begin{itemize}
-        \item[$\square$] Do you have a single sentence that provides an outline of the section, mentioning the different section headings as part of the outline? 
-    \end{itemize}
-\subsection{Results}
-     \begin{itemize}
-        \item [$\square$] Did you organize your model run results similarly to your objectives from the introduction? 
-         \item [$\square$] Did you avoid interpreting the results and just present the facts?  The Discussion section is for interpreting the results. 
-     \end{itemize}
-\subsubsection{Economics - optional}
-     \begin{itemize}
-        \item [$\square$] Did you organize your model runs similarly to your objectives from the introduction? 
-        \item [$\square$] Did you avoid interpreting the results and just present the facts?  The Discussion section is for interpreting the results. 
-     \end{itemize}
-\subsubsection{Sensitivity Analysis}
-     \begin{itemize}
-        \item [$\square$] Did you consider organizing your model runs similarly to your objectives from the introduction? 
-        \item [$\square$] Did you report your SA results with a very specific report... eg when $x$ is increased by 20\% $y$ is increased by $z$ percent.  When $x$ is decreased by 20 \% then $y$ is decreased by $zz$ percent.
-        \item [$\square$] Did you avoid interpreting the results and just present the facts?  The Discussion section is for interpreting the results. 
-     \end{itemize}
-     
-\subsection{Discussion}
- \begin{itemize}
-        \item[$\square$] Do you have a single sentence that provides an outline of the section, mentioning the different section headings as part of the outline? 
-    \end{itemize}
-
-\subsubsection{Results}
-\begin{itemize}
-    \item [$\square$] Did you interpret and discuss your results?
-    \item [$\square$] Did you start a paragraph with a take home message sentence with the recommendation from the results? 
-\end{itemize}
-\subsubsection{Economics - optional}
-\begin{itemize}
-    \item [$\square$] Did you interpret and discuss your results?
-    \item [$\square$] Did you start a paragraph with a take home message sentence with the recommendation from the results? 
-\end{itemize}
-
-\subsubsection{Sensitivity Analysis}
-\begin{itemize}
-    \item [$\square$] Did you have recommendations based on what was learned from the sensitivity analysis? 
-    \item [$\square$] Did you start a paragraph with a take home message sentence with the recommendation from the SA? 
-    \item [$\square$] Do you discuss which parameters the dependent variable is more sensitive to?  Did you avoid the phrase "most sensitive parameter" as the model results are sensitive to the parameters, but the parameters are not sensitive to the dependent variable?   
-
-\end{itemize}
-\subsubsection{Sources of Error \& Limitations}
-
-\begin{itemize}
-    \item [$\square$] Did you discuss the error that might be associated with the chosen math model?
-    \item [$\square$] Did you discuss the error that might be associated with the parameter values for the chosen math model?
-    \item [$\square$] Did you discuss the truncation error that might be associated with the numerical method? 
-    \item [$\square$] Did you discuss that roundoff error is part of any computational method?
-    \item [$\square$] Did you discuss any other relevant limitations?
-
-\end{itemize}
-\subsubsection{Recommendations}
-\begin{itemize}
-    \item [$\square$] Did you provide the recommendations as a bulleted list? 
-    \item [$\square$] Did you summarize the recommendations that come from the results?  Yes, please repeat this info here if you already discussed recommendations based on results. 
-    \item [$\square$] Did you summarize the recommendations that come from the economic analysis?  Yes, please repeat this info here  if you already discussed recommendations based on results
-    \item [$\square$] Did you summarize the recommendations that come from the sensitivity analysis?  Yes, please repeat this info here  if you already discussed recommendations based on results
-    \item [$\square$] Do you keep your recommendations focused on the work completed in the project and avoid broad sweeping recommendations that AI can produce?  For example, your recommendations state something like fostering stakeholder collaborations, but your project has not discussed stakeholder collaboration until this part of the document?
-    \item [$\square$] Did you provide recommendations for future work that could address some weaknesses of the study or strengthen the work?
-    
-\end{itemize}
-\section{Conclusions \& Recommendations}
-   \begin{itemize}
-        \item[$\square$] Do you have a single sentence that provides an outline of the section, mentioning the different section headings as part of the outline? 
-    \end{itemize}
-\subsection{Conclusions}
-\begin{itemize}
-    \item [$\square$] Do you have no references to information in prior sections such as tables or figures, as this section should stand on its own?  If you need such information in this section, you can copy a table or figure to this section. 
-    \item [$\square$] Did you organize your conclusions using your objectives from the introduction?
-\end{itemize}
-
-\subsection{Recommendations}
-\begin{itemize}
-    \item [$\square$] Did you provide your recommendations as a bulleted list that is introduced with a sentence?  This info can be copied from your Discussion section. Recommendations should be specific and based on results from the model runs, the economic model runs, the sensitivity analysis and the sources of error analysis. 
-
-\end{itemize}
-
-\section{References}
-\begin{itemize}
-    \item [$\square$] Are your citations and references in the proper format?  (If you use your \LaTeX template properly, then the answer should be yes.)
-    \item [$\square$] Do you cite peer reviewed sources for statements of fact?  It is OK to have a few secondary or more informal sources, but most sources should be peer reviewed primary literature. 
-    \item [$\square$] If you used a Python library function, did you provide a citation to that library in your Applications section when you describe how your code works? 
-    \item [$\square$] Did you provide citations for all equations presented in the document?
-    \item [$\square$] Did you provide citations for all information presented in the Background and Methods sections?  Often you will need at least one citation per paragraph in these sections. 
-    \item [$\square$] Is every cited item in the references and is every reference cited?  If you list references that you do not cite, readers could see you as padding your references which is unprofessional. 
-    \item[$\square$] Are your BibTex items complete?  Be sure your citations have identifiable information for both author and year.  So, (Foundation 2024) is not an appropriate citation for a foundation such as the Sanibel-Captiva Conservation Foundation.   If you do not have a date, use n.d.  Check that your capitalization in your BiBTeX item is correct.
-
-\end{itemize}
-\section{Program Documentation}
-\begin{itemize}
-    \item[$\square$] Do you present the problem that was used to verify the code?
-    \item[$\square$] Do you report relative error of comparing code to another reasonable approach?
-    \item[$\square$] Is the Appendix heading at the top of the page?  You can use [b] on the table or figure command to move the object to the botoom of the page. 
-\end{itemize}
-\section{Formatting}
-\begin{itemize}
-    \item [$\square$] Do you format your units using \LaTeX, similar to $\mathrm{\frac{m}{s}}$.  Do not use m/s or $m/s$  for example.  Units should not be in italics.  \LaTeX code for units is \begin{verbatim}
-        $\mathrm{\frac{m}{s}}$
-    \end{verbatim}
-    \item [$\square$] Did you use your symbols AND English though out your text?  For example, if $B_o^*$ is important, be sure to define the symbol in English and use the symbol and the definition thoughout your document. 
-    \item [$\square$] Do you avoid two headers without any text in between?
-     \item [$\square$]  Do you introduce lists with a sentence and not with a header?
-    \item [$\square$]  Do you avoid widows and orpans in your document?  \LaTeX should take care of these problems for you, but sometimes you will need to use the command "newpage" to move a lone header to the next page.
-\end{itemize}
-\section{Writing}
-\begin{itemize}
-     \item[$\square$] Did you provide an overview for each major section and for any large subsections?
-     \item[$\square$] Do you use precise and concise language that is specific and focused?  AI generates very general language that does not say anything specific.  As an engineer, you want to be careful to not over promise in your objectives or your results.  
-     \item [$\square$] Do you stay in mostly past and present tense, and hardly using future tense?  [From ASCE: Use the past tense to report what happened in the past: what the authors did, what someone reported, what happened in an experiment, and so on. Use the present tense to express general truths, such as conclusions (drawn by the authors or by others) and facts not limited by time (including information about what the paper does or does not cover). Reserve the future tense for what will be done in the coming months or years. Typically, most sentences will be in the past tense, some will be in the present tense, and very few, if any, will be in the future tense.]
-)
-    \item [$\square$] Do you avoid "story telling mode" and put your take home message in your topic sentence of every paragraph (and not at the end of the paragraph - like a story)?
-    \item [$\square$] Did you search for "this" or "these" without an accompanying noun throughout your document and edit for clarity? 
-    \item [$\square$] Did you search for "it" throughout your document and edit for clarity? 
-     \item [$\square$] Did you introduce all lists (bulleted, numbered, etc) with a sentence?
-      \item [$\square$] Did you avoid having two headers without any sentences in between throughout the document?
-      \item [$\square$] Did you spell out all numbers under ten unless the number is part of a label such as Objective 1 or Figure 11? 
-      \item [$\square$] Are you consistent with capitalization?  Many students overuse capitalization within their documents. Names of languages and software are usually capitalized, e.g. Python and Excel. 
-      \item [$\square$]  Do you italicize scientific names when writing them in a text? This is the standard practice for properly formatting species names in scientific writing; the genus name is capitalized, while the species name is not capitalized.
-      \item[$\square$] The first time you used an acronym, did you define it? As a courtesy to the reader, consider spelling it out every so often, such as the beginning of a new section,  as the reader may not have started at the beginning of the document. 
-      \item[$\square$] Do you repeat key words to increase understanding?
-      \item[$\square$] Do your lists have parallel construction?
-      \item[$\square$] Do you avoid quoting in your literature review and other parts of your document?  Quoting sources is rarely done in technical writing.
-      \item[$\square$] Are you consistent with your POV throughout the document?  If you start in third person, do you stay in third person?
-      \item[$\square$] Did you avoid starting sentences with out number or a symbol?
-\end{itemize}
-\subsection{Words to Watch}
-\begin{itemize}
-    \item [$\square$] "significant" This word has particular meaning statistically.  If you use this word when discussing your results, are you discussing statistically significant results?
-    \item [$\square$] use "fewer" when you can count the noun, and "less" when you cannot. For example, I would buy fewer gallons of soy milk, but I would like less soy milk in my glass.   \item [$\square$] Did you avoid being overly dramatic in your prose and avoid words such as "very", "incredibly", "dramatically", "massively", "pivotal", "greatly" etc. Avoid being overly drammatic in your prose.  Let data convince the reader there is an "incredibly massive" drop in the reading.  Rather, present percent differences as evidence and let the reader conclude that the drop was "incredibly massive". 
-    \item [$\square$] 
-\end{itemize}
-\subsection{Words to Avoid}
-Search for these words/phrases in your document and edit for clarity. By using more precise language, your document will be clearer, and hopefully, more concise as well. 
-\begin{itemize}
-    \item [$\square$] "done" or "was done"
-    \item [$\square$] "being" as in "being done", or "is being done"
-    \item [$\square$] "thing"
-    \item [$\square$] "going"
-    \item[$\square$] "came up with" try "developed" or "created"
-    \item [$\square$] "like"  Overuse of "like" can make your document sounds less formal and more "like a valley girl". "Such as" can be a good replacement for "like"
-    \item [$\square$] "cheap"  Do you mean quality or cost?  "Inexpensive" is a clearer word when describing costs.  "Poor quality" is clearer than "cheap". 
-\end{itemize}
-
 
 \chapter{Program Verification}
 \label{App:Program Verification}
