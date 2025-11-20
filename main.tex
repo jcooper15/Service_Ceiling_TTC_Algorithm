@@ -283,28 +283,20 @@ model to predict a unique service ceiling and dynamic TTC. This model is simple 
 period, while still being accurate enough for a strong prediction for future live testing.
 
 \chapter{Background} 
-Provide text here telling the reader what is in the Background Section.  Avoid having headers without text in between. 
-Use subsections whenever needed.  Be sure to include at least one figure here about your project.  This figure could be a relevant map or a diagram or a photograph. Be sure to refer to the figure using \LaTeX commands such as 
-\begin{verbatim}
-    \ref
-    \label
-\end{verbatim} Using this approach will help you avoid referring to the wrong figure number when you add more figures to your document.   For example, Figure~\ref{fig:gwgrid} provides an example grid for a groundwater problem.  Be sure to cite your sources for all figures as shown in Figure~\ref{fig:gwgrid}
+This section will introduce the client, the problem situation, relevant literature, and method options.
 
-\begin{figure}[] % can put b in [] for bottom
-    \centering
-    \includegraphics{images/GWgrid.png}
-    \caption{Plan view of aquifer with gravel pit (inspired by an example from \protect \cite{anderson2015applied}).}
-    \label{fig:gwgrid}
-\end{figure}
+\section{Client Background}
+Jason Cowper is the lead engineer on the prototype team for the Summit Rotorcraft Systems next-generation helicopter.
 
-Most everything you have to say in this section should come from relevant, specific, high quality (e.g. peer reviewed) sources.  If you need help finding good sources, please ask for help sooner than later. Everything you write that you do not provide a source for should be your own ideas, otherwise, you must provide the appropriate source. Providing the wrong source or inappropriate sources is a form of plagiarism, so be sure you understand the requirements of this section.  Just ask for help if needed.  
+\section{Problem Situation}
+The new helicopter design must adhere to the safety and performance requirements enforced by the FAA. A critical performance measurement
+relevant to these requirements is the critical vertical rate of climb (VROC) of the rotorcraft. This VROC is a minimum that the rotorcraft
+must never decrease to, so a service ceiling must be determined to ensure this never occurs. Cowper is requesting the development of a
+computational model that can determine this altitude threshold, as well as a time-to-climb (TTC) measurement to this altitude.
 
-\section{Client Background - update for your problem}
-Introduce your client to the reader.
-\section{Problem Situation - update for your problem}
-This section will be more detailed than the overview you provided in the introduction.
 \section{Case Studies or Relevant Literature - update for your problem}
-Present other's approaches to solving similar problems and/or present relevant literature that informs your project.
+
+
 \section{Method Options and Justification - update for your problem}
 In your ENGR 326 class lab reports you do not provide a lot of background information, other than mention what other numerical methods can be used to solve the problem.  However, for this formal technical report, you want to be sure to provide some background information to the reader.  The purpose of conveying this information is to demonstrate that you know what you are talking about, because you have a good understanding of your client and the problem setting and that you have reviewed prior instances of solving similar problems.  Thus, you are not remaking the wheel, but rather building on that knowledge and possibly, when doing research, adding to that knowledge.
 Your background section should address these questions.
