@@ -472,74 +472,128 @@ The power rating of the turboshaft engine will be increased and decreased at a s
 ceiling and TTC. Oberving a linear or non-linear change will be essential in limiting any changes in the current engine rating.
 
 \chapter{Application} 
-In this section you will report the values of the data required to complete the analysis. Be sure to cite the source of all data and report all units.  Feel free to update the subsection headers below to reflect your project context. In this section you will address the following questions
-\begin{itemize}
-\item  What were your data needs?
-    \item  How did you gather data?
-    \item  What data collection issues/constraints did you have?
-    \item  How reliable are your data sources?
-\end{itemize}
-\section{Math Model Parameters and Values}
-You may want to use tables to present your parameter values. 
 
-Table~\ref{table:assembly} and Table~\ref{tab:HorizTab} are example tables. Try to not argue with \LaTeX when \LaTeX decides where to put your figures and tables. 
- Usually \LaTeX puts them in a reasonable place. You can use [b] to put the table or figure at the bottom of a page. 
+This section will primarily expand upon the math model and the RK45 method by introducing relevant parameters for calculations.
+
+\section{Math Model Parameters and Values}
+
 \begin{table}
-\caption{An example table}
-\label{table:assembly}
+\caption{SRS Prototype Specifications}
+\label{table:heli}
 \centering
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{l l} % 2 columns that are left justfied
 \hline\hline
-\multicolumn{1}{c}{Assembly Attribute} &
-\multicolumn{1}{c}{Values} \\ % centered text over 
-\multicolumn{1}{c}{(1)} &
-\multicolumn{1}{c}{(2)} \\
+\multicolumn{1}{c}{Specification} &
+\multicolumn{1}{c}{Value} \\ % centered text over 
 \hline
-Number of particles & 4008 \\
-Particle sizes & Multiple  \\
-Particle size range & $0.45D_{50}^{\:\ast}$ to $1.40D_{50}$ \\
-Initial void ratio, $e_{\mathrm{init}}$ & $0.179$ \\
-Assembly size & $54D_{50} \times 54D_{50} \times 54D_{50}$ \\
-\hline
-\multicolumn{2}{l}{$\ast$ $D_{50}$ represents the median particle diameter} \\
+Maximum Gross Weight $W$ ($N$) & 12753 \\
+Radius of Rotor $r$ ($m$) & 4.2  \\
+Rotor Disk Area $A$ ($m^2$) & 55.42 \\
+Sea Level Turboshaft Power $P_{SL}$ ($W$) & 310000 \\
+Mechanical Efficiency $\eta$ & 0.92  \\
+Turboshaft Density Exponent $\alpha$ & 0.85  \\
+Induced Power Factor $p_f$ & 1.1 \\
+Time Constant $\tau$ ($s$) & 5 \\
+Critical ROC $v_{crit}$ ($\frac{m}{s}$) & 0.51 \\
 \hline\hline
 \end{tabular}
 \normalsize
 \end{table}
 
-\begin{table}[]
-    \caption{Another table example}
-    \label{tab:HorizTab}
-    \centering
-\begin{center}
-    \begin{tabular}{ | l | l | l | p{5cm} |}
-    \hline
-    Day & Min Temp & Max Temp & Summary \\ \hline
-    Monday & 11C & 22C & A clear day with lots of sunshine.  
-    However, the strong breeze will bring down the temperatures. \\ \hline
-    Tuesday & 9C & 19C & Cloudy with rain, across many northern regions. Clear spells 
-    across most of Scotland and Northern Ireland, 
-    but rain reaching the far northwest. \\ \hline
-    Wednesday & 10C & 21C & Rain will still linger for the morning. 
-    Conditions will improve by early afternoon and continue 
-    throughout the evening. \\
-    \hline
-    \end{tabular}
-\end{center}
-
+\begin{table}
+\caption{External Parameters}
+\label{table:ISA}
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{l l} % 2 columns that are left justfied
+\hline\hline
+\multicolumn{1}{c}{Parameter} &
+\multicolumn{1}{c}{Value} \\ % centered text over 
+\hline
+Gravity $g$ ($\frac{m}{s}$) & 9.81 \\
+ISA Sea Level Air Density $\rho_0$ ($\frac{kg}{m^3}$) & 1.225 \\
+ISA Standard Sea Level Temperature $T_0$ ($K$) & 288.15 \\
+ISA Standard Temperature Lapse Rate $L$ ($\frac{K}{m}$) & -0.0065 \\
+ISA Standard Gas Constand for Air $R$ ($\frac{J}{kgK}$) & 287.05 \\
+\hline\hline
+\end{tabular}
+\normalsize
 \end{table}
 
-\section{Numerical Method Parameters and Values}
- You should refer to your code verification appendix here.  If you would like to cite the source of your code, please see this information \hyperlink{https://scipy.org/citing-scipy}{https://scipy.org/citing-scipy}.
+\begin{table}
+\caption{Sensitivity Analysis Parameters}
+\label{table:sa}
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{l l} % 2 columns that are left justfied
+\hline\hline
+\multicolumn{1}{c}{Parameter} &
+\multicolumn{1}{c}{Value} \\ % centered text over 
+\hline
+Variation of Sea Level Turboshaft Power $P_{SL}$ (\%) & $\pm 10$ \\
+\hline\hline
+\end{tabular}
+\normalsize
+\end{table}
 
-\section{Economic Model Parameters and Values  - Required if seeking an A grade on the Project Report}
-Be sure to report only your economic model parameter values here, but no results.
-\section{Other Physical Parameters and Values - if needed}
-Be sure to delete if you do not use this subsection.
+
+Table \ref{table:heli} lists all rotorcraft prototype specifications delivered by Summit Rotorcraft Systems for this math model.
+All specifications have been experimentally determined to be the best suitable option for the new design.
+
+Table \ref{table:ISA} lists all ISA standard parameters that are essential to the calculation of surface ceiling and TTC \cite{ISA}.
+
+Table \ref{table:sa} lists the variation in sea level turboshaft power in the sensitivity analysis.
+
+\section{Numerical Method Parameters and Values}
+
+\begin{table}
+\caption{RK45 Parameters}
+\label{table:rk45}
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{l l} % 2 columns that are left justfied
+\hline\hline
+\multicolumn{1}{c}{Parameter} &
+\multicolumn{1}{c}{Value} \\ % centered text over 
+\hline
+Initial Time $t_0$ ($s$) & 0 \\
+Final Time $t_f$ ($s$) & 3600 \\
+Initial State $y_0$ & [0,0] \\
+Max Step Size $max_step$ & 1 \\
+Relative Tolerance $r_tol$ & 0.001 \\
+Absolute Tolerance $a_tol$ & 0.000001 \\
+\hline\hline
+\end{tabular}
+\normalsize
+\end{table}
+
+Table \ref{table:rk45} lists all parameters set for the RK45 solving of Eq. \ref{eq:ode}. Relative and absolute tolerances
+are default settings in the RK45 solution program \cite{scipy}.
+
 \section{Code Outline \& Model Runs }
- Provide an outline/description of how your code works and is organized.  Be sure to cite sources of any libraries that you used. 
- Use a bulleted or numbered list to outline your model runs. Refer to your numerical methods verification appendix here as well as the appendix that contains your code. You may choose to organize your model runs similar to your numbered project objectives.
+
+The program code is structured to introduce variables as they are required. Each of these variable sets are followed by the
+relevant math model function or numerical method introduced as a function. The code generally follows the structure of the
+math model, and computes in the order as follows:
+\begin{enumerate}
+    \item Initial parameters, found in Table \ref{table:heli} and Table \ref{table:ISA}, are introduced.
+    \item A density function is established, based on Eq. \ref{eq:density}.
+    \item A function of available turboshaft power is established, based on Eq. \ref{eq:P_a}.
+    \item A function of required power is established, utilizing Eq. \ref{eq:vi} and Eq. \ref{eq:P_r}.
+    \item A steady state VROC function is established, based on Eq. \ref{eq:roc}.
+    \item An ODE function is established, separating the second order climb dynamics ODE from Eq. \ref{eq:ode}into two
+    first order ODEs.
+    \item Initial parameters are established for the RK45 method, found in Table \ref{table:rk45}.
+    \item The climb dynamics ODE (Eq. \ref{eq:ode}) is solved by the RK45 method.
+    \item The resulting array of results are analyzed to find the moment the critical VROC, found in Table \ref{table:heli},
+    is crossed.
+    \item The resultant altitude and time measurement from this analysis are identified as the rotorcraft surface ceiling and TTC.
+    Results are plotted.
+    \item Sensitivity analysis is conducted to observe the sensitivity of surface ceiling and TTC when sea level turboshaft power
+    is changed. Results are plotted.
+\end{enumerate}
+
 \chapter{Results \& Discussion}
 Provide text here telling the reader what is in the Results \& Discussion Section.  Avoid having headers without text in between.  Organize your results presentation using the list of objectives you developed in the Introduction. Feel free to introduce new headings to help organize your information. 
 \section{Results}
