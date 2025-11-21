@@ -325,7 +325,7 @@ This section will outline the mathematical equations and strategies used to comp
 The solution approach, math model, and numerical method will all be discussed.
 
 \section{Overview of Approach}
-The approach to solve for surface ceiling and TTC will begin with the input of rotorcraft specifications and ISA parameters \cite{ISA}.
+The approach to solve for service ceiling and TTC will begin with the input of rotorcraft specifications and ISA parameters \cite{ISA}.
 The second order climb dynamics ODE will then be developed using density, available power, required power, induced velocity,
 and steady state VROC, which all vary with altitude. The ODE is then solved with the RK45 method, and the altitude measured at the
 critical VROC is obtained for the final result, as well as the corresponding time. A sensitivity analysis is then conducted
@@ -337,41 +337,140 @@ to observe service ceiling sensitivity to turboshaft power.
     \mathrm T(h)=T_0+Lh
 \end{equation}
 
+\noindent where\\
+    \indent $T(h)$ is temperature varying with altitude ($K$).\\
+    \indent $T_0$ is ISA standard sea level temperature ($K$) \cite{ISA}.\\
+    \indent $L$ is ISA standard temperature lapse rate ($\frac{K}{m}$) \cite{ISA}.\\
+    \indent $h$ is instantaneous altitude ($m$).
+
+Eq. \ref{eq:temp} calculates temperature as altitude increases.
+
 \begin{equation} \label{eq:density}
     \mathrm \rho(h)=\rho_0(\frac{T(h)}{T_0})^{-\frac{g}{LR}-1}
 \end{equation}
+
+\noindent where\\
+    \indent $\rho(h)$ is density varying with altitude ($\frac{kg}{m^3}$).\\
+    \indent $\rho_0$ is ISA standard sea level density ($\frac{kg}{m^3}$) \cite{ISA}.\\
+    \indent $g$ is ISA standard sea level gravity ($\frac{m}{s^2}$) \cite{ISA}.\\
+    \indent $R$ is ISA standard specific gas constant for air, $\frac{J}{kgK}$ \cite{ISA}.\\
+
+Eq. \ref{eq:density} calculates density as altitude increases, utilizing ISA measurements to ensure an accurate density
+measurement.
 
 \begin{equation} \label{eq:vi}
     \mathrm v_i(h)=\sqrt{\frac{W}{2A\rho(h)}}
 \end{equation}
 
-where: vi = sea level hover induced velocity
+\noindent where\\
+    \indent $v_i(h)$ is hover induced velocity ($\frac{m}{s}$) \cite{helidyn}.\\
+    \indent $W$ is the maximum gross weight of the rotorcraft ($N$).\\
+    \indent $A$ is the rotorcraft rotor disk area ($m^2$).\\
+
+Eq. \ref{eq:vi} determines induced velocity from a hover.
 
 \begin{equation} \label{eq:P_a}
     P_a(h)=\eta P_{SL}(\frac{\rho(h)}{\rho_0})^\alpha
 \end{equation}
 
+\noindent where\\
+    \indent $P_a(h)$ is available turboshaft power ($W$) \cite{helidyn}.\\
+    \indent $\eta$ is mechanical efficiency.\\
+    \indent $P_{SL}$ is sea level turboshaft power ($W$).\\
+    \indent $\alpha$ is the turboshaft density exponent.\\
+
+Eq. \ref{eq:P_a} determines the total available turboshaft power for flight. Mechanical efficiency $\eta$ is a measurement
+calculated by SRS from prototype simulation. Turboshaft density exponent $\alpha$ is a measurement of how sensitive
+turboshaft power output is to changes in air density \cite{helidyn}. This exponent has been provided by SRS.
+
 \begin{equation} \label{eq:P_r}
     \mathrm P_r(h)=p_fWv_i(h)
 \end{equation}
+
+\noindent where\\
+    \indent $P_r(h)$ is required turboshaft power ($W$) \cite{helidyn}.\\
+    \indent $p_f$ is the induced power factor.\\
+
+Eq. \ref{eq:P_r} determines required turboshaft power to maintain a hover. Induced power factor $p_f$ indicates the extra turboshaft
+power needed to overcome drag produced from thrust \cite{helidyn}.
 
 \begin{equation} \label{eq:roc}
     \mathrm v_{ss}(h)=\frac{P_a(h)-P_r(h)}{W}
 \end{equation}
 
+\noindent where\\
+    \indent $v_{ss}$ is steady state vertical rate of climb ($\frac{m}{s}$).\\
+
+Eq. \ref{eq:roc} determines steadt state vertical rate of climb, which depends on excess turboshaft power.
+
 \begin{equation} \label{eq:ode}
     \mathrm \tau\frac{d^{2}h}{dt^{2}}+\frac{dh}{dt}=v_{ss}(h)
 \end{equation}
 
-\section{Numerical Methods}
-If you only present one numerical method here, be sure to change the name of this subsection.  Often you may already have most of this section written as a part of one of your lab assignments.  
+\noindent where\\
+    \indent $\tau$ is the time constant for lag in vertical speed response ($s$).\\
+    \indent $\frac{d^2h}{dt^2}$ is vertical climb acceleration ($\frac{m}{s^2}$).\\
+    \indent $\frac{dh}{dt}$ is vertical rate of climb ($\frac{m}{s}$).\\
 
-A mistake people make in this section is they forget to move their justification for the numerical method choice up to the Background section. 
+Eq. \ref{eq:ode} is the second order differential equation that must be solved to determine service ceiling and TTC. Time constant
+$\tau$ is an experimentally calculated value, measured from prototype simulation.
+
+\section{Numerical Method}
+
+\begin{equation} \label{eq:RK4}
+\mathrm y_{i+1} = y_i+(\frac{37}{387}k_1+\frac{250}{621}k_3+\frac{125}{594}k_4+\frac{512}{1771}k_6)h
+\end{equation}
+
+\begin{equation} \label{eq:RK5}
+\mathrm y_{i+1} = y_i+(\frac{2825}{27648}k_1+\frac{18575}{48384}k_3+\frac{13525}{55296}k_4+\frac{277}{14336}k_5+\frac{1}{4}k_6)h
+\end{equation}
+
+\noindent where\\
+\indent $y_i$ is the function evaluation at interval $i$\\
+\indent $k_i$ is the slope along each interval $i$\\
+\indent $h$ is the step size\\
+
+The numerical method used in this project is the Runge-Kutta-Fehldberg method, also known as RK45. This method solves the ODE
+using Eq. \ref{eq:RK5}, and the error is found by finding the difference between this solution and the solution using
+Eq. \ref{eq:RK4}. The value of each $k$ coefficient is unique. 
+
+\begin{equation} \label{eq:k1}
+\mathrm k_1=f(x_i,y_i)
+\end{equation}
+
+\begin{equation} \label{eq:k2}
+\mathrm k_2=f(x_i+\frac{1}{5}h,y_i+\frac{1}{5}k_1h)
+\end{equation}
+
+\begin{equation} \label{eq:k3}
+\mathrm k_3=f(x_i+\frac{3}{10}h,y_i+\frac{3}{40}k_1h+\frac{9}{40}k_2h)
+\end{equation}
+
+\begin{equation} \label{eq:k4}
+\mathrm k_4=f(x_i+\frac{3}{5}h,y_i+\frac{3}{10}k_1h-\frac{9}{10}k_2h+\frac{6}{5}k_3h)
+\end{equation}
+
+\begin{equation} \label{eq:k5}
+\mathrm k_5=f(x_i+h,y_i-\frac{11}{54}k_1h+\frac{5}{2}k_2h-\frac{70}{27}k_3h+\frac{35}{27}k_4h)
+\end{equation}
+
+\begin{equation} \label{eq:k6}
+\mathrm k_6=f(x_i+\frac{7}{8}h,y_i=\frac{1631}{55296}k_1h+\frac{175}{512}k_2h+\frac{575}{13824}k_3h+\frac{44275}{110592}k_4h+\frac{253}{4096}k_5h)
+\end{equation}
+
+\noindent Eq. \ref{eq:k1} through Eq. \ref{eq:k6} expand each $k$ value to define the terms used in the RK45 method. The ODEs
+will be solved over a range of time values to generate a list of data points. These data points encompass a range of position as
+well as velocity for each ODE.
 
 \section{Sensitivity Analysis Methodology}
-You are required to complete a sensitivity analysis.  Be sure to check in with your instructor about the design of your sensitivity analysis so that your document meets the requirements of passing the class. The sensitivity analysis could be completed on the math model, the numerical method or the economic model or some combination of all three.
 
-Be sure to check in with your instructor about the SA to be sure you are approaching the SA appropriately. 
+The purpose of the sensitivity analysis conducted for the rotorcraft prototype is to observe changes in surface ceiling and TTC 
+when the turboshaft engine power rating is changed. This knowledge is important for the determination of the final turboshaft
+engine choice for the rotorcraft design.
+
+The power rating of the turboshaft engine will be increased and decreased at a steady rate to observe fluctuation in surface
+ceiling and TTC. Oberving a linear or non-linear change will be essential in limiting any changes in the current engine rating.
+
 \chapter{Application} 
 In this section you will report the values of the data required to complete the analysis. Be sure to cite the source of all data and report all units.  Feel free to update the subsection headers below to reflect your project context. In this section you will address the following questions
 \begin{itemize}
