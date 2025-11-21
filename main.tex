@@ -595,19 +595,49 @@ math model, and computes in the order as follows:
 \end{enumerate}
 
 \chapter{Results \& Discussion}
-Provide text here telling the reader what is in the Results \& Discussion Section.  Avoid having headers without text in between.  Organize your results presentation using the list of objectives you developed in the Introduction. Feel free to introduce new headings to help organize your information. 
-\section{Results}
-Your results to your math model are presented here.
-\subsection{Economic Analysis}
-Your results to your optional economic analysis are presented here.
-\subsection{Sensitivity Analysis}
-Your results to your sensitivity analysis are presented here.
 
-Describe the assessment of the sensitivity of the solution to different parameters, and any input and model errors or uncertainties.  This section should include
-\begin{itemize}
-    \item a summary of the results of the sensitivity analysis. This summary should include specific information such as a report both the percent change in the parameter and the resulting percent change in the dependent variable.  So, for example, you should say that when parameter $A$ was increased by yy percent, the resulting increase in the dependent variable was xx percent.  Be specific and precise about each report. A bulleted list can be used if you have a lot of parameters.
-    \item at least one graphic summary of the sensitivity analysis via a figure or table. A single figure is preferred when all parameters can be compared in one figure.  Figure captions should summarize the take home message of the figure - indicating the parameter(s) the dependent variable is most sensitive to.  Make sure that all figures and tables are discussed and referenced from the text.
-\end{itemize}
+This section provides and discusses the results of the computations from the Applications Section.
+
+\section{Results}
+
+\begin{table}
+\caption{Results}
+\label{table:results}
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{l l} % 2 columns that are left justfied
+\hline\hline
+\multicolumn{1}{c}{Result} &
+\multicolumn{1}{c}{Value} \\ % centered text over 
+\hline
+Service Ceiling $h_{max}$ ($m$) & 5118 \\
+Time-to-Climb $TTC$ ($min$) & 24.4 \\
+\hline\hline
+\end{tabular}
+\normalsize
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{images/results.png}
+    \caption{Service ceiling and rate of climb variation with time.}
+    \label{fig:results}
+\end{figure}
+
+The service ceiling of the SRS rotorcraft protoype is listed in Table \ref{table:results}. The corresponding time to climb to this
+altitude is also listed. Variation of VROC and altitude over time can be visualized in Fig. \ref{fig:results}.
+
+\subsection{Sensitivity Analysis}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{images/sa.png}
+    \caption{Sensitivity Analysis of service ceiling and TTC with varying sea level turboshaft power.}
+    \label{fig:sa}
+\end{figure}
+
+Sensitivity of service ceiling and TTC can be observed in Fig. \ref{fig:sa} when sea level turboshaft power is varied.
+
 \section{Discussion}
 Provide an overview of this section.  Be sure to address the following subsections content.  If possible, organize your results presentation using the list of objectives you developed in the Introduction. Feel free to introduce new headings to help organize your information.
 \subsection{Results}
