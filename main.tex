@@ -639,105 +639,85 @@ altitude is also listed. Variation of VROC and altitude over time can be visuali
 Sensitivity of service ceiling and TTC can be observed in Fig. \ref{fig:sa} when sea level turboshaft power is varied.
 
 \section{Discussion}
-Provide an overview of this section.  Be sure to address the following subsections content.  If possible, organize your results presentation using the list of objectives you developed in the Introduction. Feel free to introduce new headings to help organize your information.
+This section discusses all results found throughout the project, including primary results, sensitivity analysis, and sources
+of error.
+
 \subsection{Results}
-Discuss your results.
-After reporting the results of the program runs with text and figures in the Results Section, this section discusses and interprets the results, while referring to the presented data. No new results should be presented in this section. 
 
+It can be observed that the service ceiling and TTC listed in Table \ref{table:results} are very reasonable and realistic
+values. When compared to other light duty helicopters such as the MD Helicopters MD500, the service ceiling is comparable
+and competitive in the light duty rotorcraft market \cite{md500}.
 
-\subsection{Economic Analysis}
-Discuss your optional economic analysis.
 \subsection{Sensitivity Analysis}
-Discuss your sensitivity analysis.
 
-The results of the sensitivity analysis are discussed and interpreted in detail while referring to the presented data. For example, for a given percent change in a parameter value, the percent change in the recommended value or result is discussed and interpreted so that the parameter values or initial conditions are identified that make the most impact on the dependent variable.  No new sensitivity results should be presented in this section.
+The service ceiling and TTC have non-linear relationships to change in sea level turboshaft power. It can be observed in
+Fig. \ref{fig:sa} that the service ceiling's negative slope increases as turboshaft power is decreased. 
 
+TTC is at its maximum around the original, unchanged area. When turboshaft power is both increased and decreased, TTC decreases
+in both directions. It must be noted though, that the decrease in TTC as service ceiling decreases is due to the fact that it
+naturally takes less time to reach surface ceiling if it is at a lower altitude. In the opposite direction, TTC decreasing is
+most likely due to the slower increase in service ceiling compared to the turboshaft power increase.
 
 \subsection{Sources of Error}
-Discuss your sources of error.
-There are multiple sources of error and each should be discussed.
-\begin{enumerate}
-    \item Limitations of the math model
-    \item Parameter estimation
-    \item Numerical methods have truncation error so discuss the error associated with your numerical methods. 
-    \item Any computation has round off error.  Round off error is increased with smaller step sized. 
-\end{enumerate}
+
+The specifications provided by Summit Rotorcraft Systems in Table \ref{table:heli} are generally experimental values that have
+been acquired through simulation and experimentation. These parameters are subject to experimental errors that cannot be
+determined by this project, and must instead be provided by SRS.
+
+The limitations of the math model are potential for calculation error. The precision of the results of each calculation can
+decrease as further calculations progress.
+
+Another possible source of error is the error of the RK45 method. This error can be determined by the difference between the
+ODE solution from Eq. \ref{eq:RK5} and the solution from Eq. \ref{eq:RK4}.
+
+Round off error is also a source of error in this project. Service ceiling is rounded to four significant figures, and
+TTC is rounded to three signifcant figures. This error also progresses through each calculation as the computer rounds values
+for each calculation step.
 
 
 \subsection{Recommendations}
-The recommendations should be informed by the sensitivity analysis and the sources of error discussion. 
 
-Present this info as a carefully introduced bulleted list.
+The following recommendations are presented.
 
 \begin{itemize}
-
-\item Recommendations based on Results are presented - usually "answering the question" and likely repeated from the Results section.
-\item Recommendations from the sensitivity analysis are discussed - likely repeated Sensitivity Analysis section. 
-\item Recommendations can arise from sources of error and would be repeated here.
-\item These recommendations also reported in the conclusion and can be copied and pasted.
-
-\end{itemize}   
-
-
-
-The entire Results and Discussion section should be at least four pages (including figures and tables).
-
-It is important to differentiate between reporting the Results and interpreting them in the Discussion. Results are just that—the output of the program. The results should be presented graphically in addition to in text and tables. Think about how your results are best conveyed in a non-text-based manner. Also, please make sure your visuals are crisp and clear.  A common error is to identify the most sensitive parameter in the Results Section. This interpretation of the sensitivity results should occur in the Discussion Section. 
-
-When you interpret the results, you can discuss the program that produced the results, the main results and the sensitivity analysis results, and the implication of the sensitivity analysis output on the report’s conclusions. Feel free to discuss any surprises or unexpected outcomes, or to convey that the results  were as anticipated (if that is the case). 
-
-Below are questions this section should address:
-\begin{itemize}
-    \item Did the approach you took provide results? 
-\item What were the results of applying the methodology to the problem?
-\item Can you break down the results, with numerical, graphical, or table info to make it more understandable for another engineer?
-\item  Can you discuss each table and figure sufficiently so that another engineer can understand it? 
-\item How did you assess the sensitivity of the solution to different parameters, and any other errors or uncertainties?
+    \item Ensure the rotorcraft protoype specifications receive minimal change to stay within the acceptable service ceiling and
+    TTC calculations.
+    \item Consider sources of error, primarily experimental errors, when live testing begins to successfully compensate for any
+    difference in actual results from computational model results.
 \end{itemize}
-
-
 
 \chapter{Conclusions \& Recommendations}
 
-Provide text here telling the reader what is in the Results \& Discussion Section.  Avoid having headers without text in between. 
+This section describes final conclusions from the project, as well as a final presentation of recommendations.
+
 \section{Conclusions}
-Present conclusions here.
 
-The main results as well as the sensitivity analysis are summarized in the Conclusion section as well as Results and Discussion sections because sometimes your reader "just wants to find the answer."
-\begin{itemize}
-    \item Provide a brief summary of what you have said/made in the whole report
-    \item Address the objectives you gave in the introduction—were they met? Why (not)?  It is fine to completely copy and past them as a list here.
-\end{itemize}
+A computational model has been developed to determine rotorcraft service ceiling and time-to-climb (TTC) based on provided
+rotorcraft specifications and ISA standard atmospheric conditions \cite{ISA}. Final service ceiling and TTC calculations of the
+Summit Rotorcraft Systems prototype are displayed in Table \ref{table:results}. The following objectives have been met throughout
+the development of these calculations.
+
+\begin{enumerate}
+    \item \textit{Steady State VROC} Determine steady state VROC as a function of altitude.
+    \item \textit{First Order ODEs} Determine first order ODEs from the second order climb dynamics ODE.
+    \item \textit{Altitudes and VROCs} Use the Runge-Kutta-Fehldberg method to find altitude and VROC values that change with time.
+    \item \textit{Service Ceiling} Determine service ceiling from VROC and altitude results.
+    \item \textit{Dynamic TTC} Record the corresponding TTC from elapsed time to reach service ceiling.
+\end{enumerate}
+
 \section{Recommendations}
-Present recommendations here.   Give recommendations if applicable, using a separate paragraph and a bulleted list.  Indicate how the sensitivity analysis informs these recommendations.  You can copy and paste your recommendations from the Recommendations Section.
 
-The entire Conclusions \& Recommendations Section should be one to two pages.
+The following recommendations are presented.
 
-Your conclusions must reflect and respond to the Objectives you established in the Introduction.  Additionally, you must have recommendations for your client going forward. Remember, this section may be the only section that is read by your client.  No new information should be presented in this section.  All conclusions and recommendations should have been presented with context in the Results and Discussion section. 
-
-Below are questions you should address in this section.
 \begin{itemize}
-    \item  Could you summarize the whole report in a nutshell?
-\item Did you adequately address the objectives you gave in the introduction?
-\item What were the final technical achievements?
-\item Do you have any recommendations? Could have a subheading here to highlight these for the inpatient reader.
-\item How did the Sensitivity Analysis inform the conclusion and recommendations?
+    \item Ensure the rotorcraft protoype specifications receive minimal change to stay within the acceptable service ceiling and
+    TTC calculations.
+    \item Consider sources of error, primarily experimental errors, when live testing begins to successfully compensate for any
+    difference in actual results from computational model results.
 \end{itemize}
-%\section{References}
-
-
-
-
 
 
 \pagebreak
-% the following section should be removed for the final document
-%\section{References} 
-Be sure to use high quality references.  Some references should be from peer reviewed journals. Others can be from government documents that outline standards or similar information.  Avoid references to sources that are affiliated with commercial or political organizations unless you have a good reason. For example if you are pricing parts, a .com source would be reasonable.  If your client is from an environmental non-profit, then it would make sense to cite their work. 
-
-One-to-one correspondence. Every reference listed must be cited in the text.  Every citation that meets ASCE requirements, should be listed in references.  When mistakes are made with citations or references, the document becomes less professional and less credible - even verging on dishonest. 
-
-Sometimes, in order to make your scenario work, you might decide to have a fictitious citation and reference.  Be sure to check in with you instructor and be sure to put the word fictitious in your reference.
 
 % Here's the list of references:
 \raggedright
