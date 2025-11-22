@@ -156,11 +156,6 @@ Course Instructors:
  \setlength\cftbeforefigskip{\baselineskip}  %manually set spacing between entries
  \listoffigures
  \end{singlespace}
- BE SURE TO REMOVE THIS TEXT.... You must have at least six (6) different types of non-text content (i.e.photo, table, graph, diagram etc), including at least: 1 \& 2) Two pictures or diagrams of the problem, 3 \& 4) two pictures or diagrams of the solution method  5) one figure or table showing your results, 6) one figure or table showing sensitivity analysis results. 
-Of course, you are free to include more than six, but avoid you building out your page length with tons of figures.  Include useful and relevant figures. 
-If you want to show a lot of figures but they are not critical for the main 
-report, throw them into an appendix. Be sure to include captions and text to support each figure and table, even in the appendix.
-
  \clearpage
 
  \addcontentsline{toc}{chapter}{List of Tables}
@@ -749,53 +744,37 @@ The following recommendations are presented.
 
 %Begin individual appendices, separated as chapters
 %\appendix
-\chapter{Appendices}
 %These two commands change the figure and table numbering within the appendix. 
 \counterwithin{figure}{section}
 \counterwithin{table}{section}
 
-%remove this section
-Appendices must be included for 
-\begin{itemize}
-    \item Program Verification - this section should report how the code was verified and report the percent difference between the best known solution and the solution obtained by the code.  If a different problem was used to verify the code, then that problem should be explained.
-    \item Additional data, tables or figures as needed.  Only include this appendix (as always) if you refer to this information in the main document (e.g. Additional explanatory figures are included in Appendix . . .”  Be sure to include text in this appendix, and not just figures and tables etc.  All figures and tables throughout the document must have captions. 
-    \item Program code - this section should be the final Appendix.
-    \end{itemize}
-\section{Address requirements of all technical communication of the SOE at CPH}
-Remember the requirements of all technical communication in the Cal Poly School of Engineering - from the syllabus.
-\begin{itemize}
-    \item All tables must have a table header above the table and all figures must have a figure caption 
-below the figure. 
-\item Table headings and figure captions should be numbered in the order in which they appear in 
-your report. (Thank you LaTeX!)
-\item Figures must have only ONE caption – remove the title at the top that EXCEL generates. 
-\item All graphs must have axes labeled with units. 
-\item Use superscript and subscript fonts when appropriate. Do not use \^ or \_ to denote superscript 
-(\^) or subscript (\_) 
-\item Equations should be created using an equation editor. (Thank you LaTeX!)
-\item When writing decimal values include the leading zero, it helps prevent misreading the value. 
-Example: preferred- 0.33 cm; not preferred- .33 cm 
-\item All figures must have high quality resolution - no fuzzy figures. 
-\end{itemize}
-Appendices can be included for 
-\begin{itemize}
-    \item Additional mathematics
-    \item Raw data
-    \item Notation
-    \item Supplemental information
-\end{itemize}
-
 \chapter{Program Verification}
 \label{App:Program Verification}
-\section{Example Appendix Figure}
-Be sure to refer to all figures with in the document.  Figure~\ref{fig:gwgrid1} demonstrates how figure numbering changes for figures in the appendices.
-\begin{figure}[] % can put b in [] for bottom
-    \centering
-    \includegraphics{images/GWgrid.png}
-    \caption{Second example of a figure. \protect \cite{anderson2015applied}.}
-    \label{fig:gwgrid1}
-\end{figure}
 
+\begin{table}
+\caption{Verification of ODE Solving Program}
+\label{table:verify}
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{l l l}
+\hline\hline
+\multicolumn{1}{c}{RK45 Method} &
+\multicolumn{1}{c}{RK23 Method} & 
+\multicolumn{1}{c}{Relative Error (\%)} \\
+\hline
+Service Ceiling = 5118 m & Service Ceiling = 5118 m & 0 \\
+TTC = 24.4 min & TTC = 24.4 min & 0 \\
+\hline\hline
+\end{tabular}
+\normalsize
+\end{table}
+
+This project was verified through the use of the SciPy \cite{scipy} function $integrate.solve_ivp$ using the $RK23$ method
+\cite{rk23}. The function solves the climb dynamics ODE found in Eq. \ref{eq:ode}, which is originally solved in the project
+by the $RK45$ method \cite{fehlberg,dormandprince}. Both methods resulted in the exact same service ceiling and TTC
+calculations, seen in Table \ref{table:verify}.
+
+\newpage
 \begin{landscape}  % code is presented in landscape
 \thispagestyle{empty} %takes footer off first page, but not rest of appendix
 
@@ -804,21 +783,192 @@ Be sure to refer to all figures with in the document.  Figure~\ref{fig:gwgrid1} 
 %or look up other fontsizes to be larger or smaller
 %[basicstyle=\footnotesize] %or \small or \tiny etc.
 
-%\begin{lstlisting}[basicstyle=\footnotesize] 
-\begin{python}
-    print("hello world")
-    ##lots of great comments
-    ##well structured code
-    ##end program example
-\end{python}
 
-Or you can input your code from  in an external file but you must edit the file to start and end with the following commands as I did in the file TinyCode.py
 \begin{python}
+    import numpy as np
+    import scipy
+    from scipy.integrate import solve_ivp
+    import matplotlib.pyplot as plt
+
+    ### PARAMETERS ###
+
+    ## SUMMIT ROTORCRAFT SYSTEMS (SRS) ROTORCRAFT SPECIFICATIONS ##
+
+    m = 1300 # maximum gross mass of rotorcraft, kg
+    r = 4.2 # radius of rotor, m
+    P_SL = 310000 # sea level turboshaft power
+    eff = 0.92 # mechanical efficiency
+    d_ex = 0.85 # turboshaft density exponent
+    pf = 1.1 # induced power factor
+
+    ## EXTERNAL PARAMETERS ##
+
+    g = 9.81 # gravity, m/s^2
+    d0 = 1.225 # sea level density, kg/m^3
+    T0 = 288.15 # ISA standard temperature, K
+    L = -0.0065 # ISA temperature lapse rate, K/m
+    R = 287.05 # ISA specific gas constant for air, J/(kg*K)
     
+    ## CALCUALTED VALUES FROM SPECIFICATIONS ##
+
+    W = m*g # maximum gross weight of rotorcraft, N
+    A = np.pi*(r**2) # disk area, m^2
+
+    ## REQUIRED CONSTANTS ##
+
+    roc_crit = 0.51 # minimum (critical) climb rate, m/s
+    tau = 5 # time constant for vertical speed dynamics, s
+
+    ### FUNCTIONS ###
+
+    def density(h): # density vs altitude
+      T = T0+L*h
+      exponent = (-1 - g/(L*R))
+      return d0*(T/T0)**exponent
+    
+    def P_avail(h): # available power, W
+      dens = density(h)
+      return eff*P_SL*(dens/d0)**d_ex
+
+    def P_req(h): # required power, W
+      dens = density(h)
+      vi = np.sqrt(W/(2*dens*A)) # induced velocity, m/s
+      return pf*W*vi
+
+    def v_ss(h): # steady-state rate of climb, m/s
+      return (P_avail(h)-P_req(h)) / W
+
+    ### ODE AND SOLVING ###
+
+    def climb_dyn(t,y): # second order climb dynamics ODE
+      h,v = y
+      h = max(0.0,h)
+      dhdt = v # roc, m/s
+      dvdt = (v_ss(h)-v)/tau # acceleration, m/s^2
+      return [dhdt,dvdt]
+
+    t_span = (0,3600) # 0 to 1 hr
+    y0 = [0,0]
+    sol = solve_ivp(climb_dyn,t_span,y0, max_step=1) # solve with RK45
+
+    t_vals = sol.t # t values
+    h_vals = sol.y[0] # h values
+    roc_vals = sol.y[1] # v values
+
+    above = (roc_vals >= roc_crit) # find when roc initially passes critical
+    first_above = np.argmax(above) # find the first roc value past critical
+
+    below = np.where((roc_vals <= roc_crit) & (np.arange(len(roc_vals)) > first_above))[0] # all points after climb where roc <= roc_crit
+
+    i = below[0] # finds the first time roc falls below roc_crit
+    h_limit = h_vals[i] # service ceiling
+    t_limit = t_vals[i] / 60 # TTC
+
+    print(h_limit)
+    print(t_limit)
+
+    ### PLOTTING ###
+
+    fig, ax1 = plt.subplots()
+
+    line1, = ax1.plot(t_vals,h_vals,label= "$Altitude$",color='blue')
+    ax1.set_xlabel("Time (s)")
+    ax1.set_ylabel("Altitude (m)",);
+    
+    plt.axhline(y=h_limit, color='black', linestyle='--')
+    plt.plot(t_limit*60, h_limit, marker='o', color='black')
+    
+    ax2 = ax1.twinx()
+    line2, = ax2.plot(t_vals,roc_vals,label= "$VROC$",color='red')
+    ax2.set_xlabel("Time (s)")
+    ax2.set_ylabel("Rate of Climb (m/s)");
+
+    lines = [line1,line2]
+    labels = [line.get_label() for line in lines]
+
+    plt.axhline(y=roc_crit, color='black', linestyle='--')
+    plt.axvline(x=t_limit*60, color='black', linestyle='--')
+
+    plt.text(1470, 0.6, 'Critical VROC (m/s)', va='bottom', color='black')
+    plt.text(1470, 10, 'Service Ceiling (m)', va='bottom', color='black')
+
+    plt.plot(t_limit*60, roc_crit, marker='o',color='black')
+
+    plt.axis(xmin= 0,xmax=2000)
+    plt.legend(lines,labels,loc='right')
+    plt.show()
+
+    ### Sensitivity Analysis ###
+
+    import matplotlib.pyplot as plt
+
+    P_SL = 320000 # initialize
+    r = 4.2 # initialize
+
+    P_SL_var = np.linspace(P_SL*.8,P_SL*1.2,20) # P_SL plus or minus 20%
+    percent_P_SL = np.linspace(-20,20,20)
+
+    percent_h = []
+    percent_ttc = []
+
+    for i in P_SL_var:
+      P_SL = i
+      sol = solve_ivp(climb_dyn,t_span,y0, max_step=1) # solve with RK45
+      t_vals = sol.t # t values
+      h_vals = sol.y[0] # h values
+      roc_vals = sol.y[1] # v values
+      above = (roc_vals >= roc_crit) # find when roc initially passes critical
+      first_above = np.argmax(above) # find the first roc value past critical
+      below = np.where((roc_vals <= roc_crit) & (np.arange(len(roc_vals)) > first_above))[0] # all points after climb where roc <= roc_crit
+      i = below[0] # finds the first time roc falls below roc_crit
+      h_temp = h_vals[i]
+      t_temp = t_vals[i] / 60
+      h_diff = (h_temp-h_limit)/((h_limit+h_temp)/2)*100
+      t_diff = (t_temp-t_limit)/((t_limit+t_temp)/2)*100
+      percent_h.append(h_diff)
+      percent_ttc.append(t_diff)
+
+    ### SENSITIVITY ANALYSIS PLOTTING ###
+
+    fig, ax1 = plt.subplots()
+
+    line1, = ax1.plot(percent_P_SL,percent_h,label= "Service_Ceiling",color='blue')
+    ax1.set_xlabel("Percent change in sea level turboshaft power")
+    ax1.set_ylabel("Percent change in service ceiling")
+
+    ax2 = ax1.twinx()
+    line2, = ax2.plot(percent_P_SL,percent_ttc,label= "TTC",color='red')
+    ax2.set_xlabel("Percent change in sea level turboshaft power")
+    ax2.set_ylabel("Percent change in TTC")
+
+    lines = [line1,line2]
+    labels = [line.get_label() for line in lines]
+
+    plt.legend(lines,labels,loc='right')
+    plt.show()
+
+    ### PROGRAM VERIFICATION ###
+
+    t_eval = np.arange(0, 3601, 1)
+
+    sol = solve_ivp(fun=climb_dyn, t_span=(0, 3600), y0=[0, 0], method='RK23', max_step=1.0, t_eval=t_eval)
+
+    t_vals  = sol.t
+    h_vals  = sol.y[0]
+    roc_vals = sol.y[1]
+
+    above = (roc_vals >= roc_crit)
+    first_above = np.argmax(above)
+    below = np.where(roc_vals[first_above:] <= roc_crit)[0]
+    i = first_above + (below[0])
+
+    h_limit = h_vals[i] # service ceiling
+    t_limit = t_vals[i] / 60.0 # TTC
+
+    print(h_limit)
+    print(t_limit)
+
 \end{python}
-
-\input{TinyCode.py}
-
     
 
 % you can change the size of the font in a listing by changing the basicstyle from ttfamily to tiny, footnotsize etc  Do a search on ttfamily and you will be all set.
