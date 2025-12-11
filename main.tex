@@ -87,7 +87,7 @@ Course Instructors:
 
 % Put your title here
 % Be sure to include the problem and the solution method 
-\textbf{\LARGE Prototype Rotorcraft Service Ceiling and Time-To-Climb Determination with the Runge-Kutta-Fehldberg Method }
+\textbf{\LARGE Prototype Rotorcraft Service Ceiling and Time-To-Climb Determination with Runge-Kutta }
 
        \vspace{1cm}
        \large{ Client: Jason Cowper, Lead Engineer\\
@@ -210,7 +210,7 @@ the lead engineer on the prototype team, prior to testing stages. A critical com
 predicted operational performance complies with the rigorous safety policies of the Federal Aviation Administration (FAA).
 
 A primary performance threshold of the rotorcraft that must be measured is its minimum vertical rate of climb (VROC). Maintaining VROC above
-this minimum, or critical, value ensures that the rotorcraft can maintain a safe level of maneuvarability. VROC decreases as altitude
+this critical value ensures that the rotorcraft can maintain a safe level of maneuvarability. VROC decreases as altitude
 increases, which implies that critical VROC is the detemining factor for the maximum safe altitude the rotorcraft can operate at. This
 maximum altitude is known as a rotorcraft's service ceiling.
 
@@ -222,7 +222,7 @@ The model will first receive inputs of the protoype helicopter's specifications 
 Standard Atmosphere (ISA) parameters to calculate density, required turbine power, and available turbine power, all varying with altitude.
 It will then use these calculations to determine a steady state VROC which can be utilized for climb dynamics.
 
-The climb dynamics algorithm will be solved by the Runge-Kutta-Fehldberg method to generate a set of altitudes, with corresponding
+The climb dynamics algorithm will be solved by the Dormand-Prince method to generate a set of altitudes, with corresponding
 VROC values, which vary with time. The service ceiling will be determined by finding the altitude that has a corresponding VROC that has
 decreased to the critical rate value determined for this rotorcraft. The TTC corresponding with service ceiling is also found from this
 service ceiling determination.
@@ -267,15 +267,15 @@ The following objectives are addressed in this report:
     \item \textit{Steady State VROC} Determine steady state VROC as a function of altitude.
     \item \textit{First Order ODEs} Determine first order ODEs from the second order climb dynamics ODE.
     \item \textit{Altitudes and VROCs} Use the Runge-Kutta-Fehldberg method to find altitude and VROC values that change with time.
-    \item \textit{Service Ceiling} Determine service ceiling from VROC and altitude results.
-    \item \textit{Dynamic TTC} Record the corresponding TTC from elapsed time to reach service ceiling.
+    \item \textit{Service Ceiling} Determine the service ceiling from VROC and altitude results.
+    \item \textit{Dynamic TTC} Record the corresponding TTC from the elapsed time to reach the service ceiling.
 \end{enumerate}
 
 \section{Motivation}
 
 The use of this developed computational model is not exclusive to the SRS prototype. The specifications of any helicopter can be used in the
 model to predict a unique service ceiling and dynamic TTC. This model is simple enough to efficiently calculate these values in a short time
-period, while still being accurate enough for a strong prediction for future live testing.
+period, while still being accurate enough for a useful prediction for future live testing.
 
 \chapter{Background} 
 This section will introduce the client, the problem situation, relevant literature, and method options.
@@ -289,9 +289,10 @@ relevant to these requirements is the critical vertical rate of climb (VROC) of 
 must never decrease to, so a service ceiling must be determined to ensure this never occurs. Cowper is requesting the development of a
 computational model that can determine this altitude threshold, as well as a time-to-climb (TTC) measurement to this altitude.
 
-\section{Case Studies or Relevant Literature}
-Much of the fundamental formulas required to solve for induced velocity, required power, available power, and rate of climb are
-referenced from the publications of J. Gordon Leishman \cite{helidyn}.
+\section{Case Studies}
+Many of the fundamental formulas required to solve for induced velocity, required power, available power, and rate of climb are
+all utilized under the assumptions of perfect rotor geometry, constant turboshaft power, and constant mechanical efficiency.
+Additionally, weight loss due to fuel consumption is neglected. \cite{helidyn}.
 
 In order to develop realistic prototype rotorcraft specfications, existing light helicopters are referenced to ensure the
 prototype is a feasible design. The MD Helicopters MD500 is a prime example of a powerful light duty helicopter that has a
