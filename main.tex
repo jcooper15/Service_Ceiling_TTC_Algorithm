@@ -266,7 +266,7 @@ The following objectives are addressed in this report:
 \begin{enumerate}
     \item \textit{Steady State VROC} Determine steady state VROC as a function of altitude.
     \item \textit{First Order ODEs} Determine first order ODEs from the second order climb dynamics ODE.
-    \item \textit{Altitudes and VROCs} Use the Runge-Kutta-Fehldberg method to find altitude and VROC values that change with time.
+    \item \textit{Altitudes and VROCs} Use the Dormand-Prince method to find altitude and VROC values that change with time.
     \item \textit{Service Ceiling} Determine the service ceiling from VROC and altitude results.
     \item \textit{Dynamic TTC} Record the corresponding TTC from the elapsed time to reach the service ceiling.
 \end{enumerate}
@@ -306,15 +306,18 @@ The math model developed for this project, as well as the numerical method used,
 out of all possibilities.
 
 \subsection{Math Model}
-The math model utilized in this project is not one that can be altered. Due to the the experimentally calculated parameters and
-specifications provided by SRS, there is only one path to determine service ceiling. The required functions of air density,
-required power, available power, and induced velocity are essential to make up the math model.
+The math model utilized in this project was developed to produce results based off of the experimentally calculated parameters and
+specifications provided by SRS. It is possible to develop other models that determine service ceiling, such as a power model
+that determines required power for critical VROC, or an atmospheric density model that determines minimum density required for 
+critical VROC. The math model selected calculates instantaneous VROC directly, which is the most efficient way to find the critical
+VROC over time.
 
 \subsection{Numerical Methods}
-The Runge-Kutta-Fehldberg method, or the RK45 method, is the most effective way to solve the second order climb dynamics ODE.
-The RK45 method is very effective for non stiff ODEs, due to its stability from adaptive step size \cite{fehlberg,dormandprince}.
-Other options, such as the RK4 method, are less reliable due to the fact that they do not have an adaptive step size, which
-may result in lower stability.
+The Dormand-Prince method is an effective way to solve the second order climb dynamics ODE.
+This Runge-Kutta method is effective for non stiff ODEs, due to its stability from adaptive step size \cite{dormandprince}.
+Higher order adaptive methods are not necessary for this project, due to the excessive computation time required that will
+provide minimal difference. Lower order methods, such as RK4 and Euler's, are less reliable due to the fact that they do not have an adaptive step size, which
+can result in lower stability.
 
 \chapter{Methods} 
 This section will outline the mathematical equations and strategies used to complete the service ceiling and TTC calculations.
@@ -329,132 +332,174 @@ to observe service ceiling sensitivity to turboshaft power.
 
 \section{Math Model}
 
+Air temperature decreases as altitude increases, which can be described using a negative lapse rate such that,
+
 \begin{equation} \label{eq:temp}
     \mathrm T(h)=T_0+Lh
 \end{equation}
 
 \noindent where\\
-    \indent $T(h)$ is temperature varying with altitude ($K$).\\
-    \indent $T_0$ is ISA standard sea level temperature ($K$) \cite{ISA}.\\
-    \indent $L$ is ISA standard temperature lapse rate ($\frac{K}{m}$) \cite{ISA}.\\
-    \indent $h$ is instantaneous altitude ($m$).
+    \indent $T(h)$ is temperature varying with altitude ($K$) \cite{helidyn},\\
+    \indent $T_0$ is ISA standard sea level temperature ($K$) \cite{ISA},\\
+    \indent $L$ is ISA standard temperature lapse rate ($\frac{K}{m}$) \cite{ISA},\\
+    \indent $h$ is instantaneous altitude ($m$).\\
 
-Eq. \ref{eq:temp} calculates temperature as altitude increases.
+\noindent Air density also varies with altitude, and is modeled as
 
 \begin{equation} \label{eq:density}
     \mathrm \rho(h)=\rho_0(\frac{T(h)}{T_0})^{-\frac{g}{LR}-1}
 \end{equation}
 
 \noindent where\\
-    \indent $\rho(h)$ is density varying with altitude ($\frac{kg}{m^3}$).\\
-    \indent $\rho_0$ is ISA standard sea level density ($\frac{kg}{m^3}$) \cite{ISA}.\\
-    \indent $g$ is ISA standard sea level gravity ($\frac{m}{s^2}$) \cite{ISA}.\\
+    \indent $\rho(h)$ is density varying with altitude ($\frac{kg}{m^3}$),\\
+    \indent $\rho_0$ is ISA standard sea level density ($\frac{kg}{m^3}$) \cite{ISA},\\
+    \indent $g$ is ISA standard sea level gravity ($\frac{m}{s^2}$) \cite{ISA},\\
     \indent $R$ is ISA standard specific gas constant for air, $\frac{J}{kgK}$ \cite{ISA}.\\
 
-Eq. \ref{eq:density} calculates density as altitude increases, utilizing ISA measurements to ensure an accurate density
-measurement.
+\noindent In a hover, the downward velocity induced by the helicoptor rotor can be modeled as
 
 \begin{equation} \label{eq:vi}
     \mathrm v_i(h)=\sqrt{\frac{W}{2A\rho(h)}}
 \end{equation}
 
 \noindent where\\
-    \indent $v_i(h)$ is hover induced velocity ($\frac{m}{s}$) \cite{helidyn}.\\
-    \indent $W$ is the maximum gross weight of the rotorcraft ($N$).\\
+    \indent $v_i(h)$ is hover induced velocity ($\frac{m}{s}$) \cite{helidyn},\\
+    \indent $W$ is the maximum gross weight of the rotorcraft ($N$),\\
     \indent $A$ is the rotorcraft rotor disk area ($m^2$).\\
 
-Eq. \ref{eq:vi} determines induced velocity from a hover.
+\noindent The total available turboshaft power for flight is described as
 
 \begin{equation} \label{eq:P_a}
     P_a(h)=\eta P_{SL}(\frac{\rho(h)}{\rho_0})^\alpha
 \end{equation}
 
 \noindent where\\
-    \indent $P_a(h)$ is available turboshaft power ($W$) \cite{helidyn}.\\
-    \indent $\eta$ is mechanical efficiency.\\
-    \indent $P_{SL}$ is sea level turboshaft power ($W$).\\
+    \indent $P_a(h)$ is available turboshaft power ($W$) \cite{helidyn},\\
+    \indent $\eta$ is mechanical efficiency,\\
+    \indent $P_{SL}$ is sea level turboshaft power ($W$),\\
     \indent $\alpha$ is the turboshaft density exponent.\\
 
-Eq. \ref{eq:P_a} determines the total available turboshaft power for flight. Mechanical efficiency $\eta$ is a measurement
-calculated by SRS from prototype simulation. Turboshaft density exponent $\alpha$ is a measurement of how sensitive
-turboshaft power output is to changes in air density \cite{helidyn}. This exponent has been provided by SRS.
+\noindent The mechanical efficiency $\eta$ is a measurement
+calculated by SRS from prototype simulation. The turboshaft density exponent $\alpha$ is a measurement of how sensitive
+turboshaft power output is to changes in air density \cite{helidyn}. This exponent has been provided by SRS.\\
+The turboshaft power required to maintain a hover is modeled as
 
 \begin{equation} \label{eq:P_r}
     \mathrm P_r(h)=p_fWv_i(h)
 \end{equation}
 
 \noindent where\\
-    \indent $P_r(h)$ is required turboshaft power ($W$) \cite{helidyn}.\\
+    \indent $P_r(h)$ is required turboshaft power ($W$) \cite{helidyn},\\
     \indent $p_f$ is the induced power factor.\\
 
-Eq. \ref{eq:P_r} determines required turboshaft power to maintain a hover. Induced power factor $p_f$ indicates the extra turboshaft
-power needed to overcome drag produced from thrust \cite{helidyn}.
+\noindent The induced power factor $p_f$ indicates the extra turboshaft
+power needed to overcome drag produced from thrust \cite{helidyn}.\\
+
+\noindent The steady state vertical climb rate (m/s) depends on excess turboshaft power following
 
 \begin{equation} \label{eq:roc}
     \mathrm v_{ss}(h)=\frac{P_a(h)-P_r(h)}{W}
 \end{equation}
 
-\noindent where\\
-    \indent $v_{ss}$ is steady state vertical rate of climb ($\frac{m}{s}$).\\
-
-Eq. \ref{eq:roc} determines steadt state vertical rate of climb, which depends on excess turboshaft power.
+The rotorcraft's instantaneous VROC is determined by steady-state VROC and an acceleration time lag,
+described as
 
 \begin{equation} \label{eq:ode}
     \mathrm \tau\frac{d^{2}h}{dt^{2}}+\frac{dh}{dt}=v_{ss}(h)
 \end{equation}
 
 \noindent where\\
-    \indent $\tau$ is the time constant for lag in vertical speed response ($s$).\\
-    \indent $\frac{d^2h}{dt^2}$ is vertical climb acceleration ($\frac{m}{s^2}$).\\
+    \indent $\tau$ is the time constant for lag in vertical speed response ($s$),\\
+    \indent $\frac{d^2h}{dt^2}$ is vertical climb acceleration ($\frac{m}{s^2}$),\\
     \indent $\frac{dh}{dt}$ is vertical rate of climb ($\frac{m}{s}$).\\
 
-Eq. \ref{eq:ode} is the second order differential equation that must be solved to determine service ceiling and TTC. Time constant
-$\tau$ is an experimentally calculated value, measured from prototype simulation.
+Eq. \ref{eq:ode} is a modification of a first order ODE, which originally calculates a steady state VROC that
+varies with time. The addition of $\tau\frac{d^2h}{dt^2}$ adds accuracy to the instantaneous VROC calculation
+via time lag from acceleration.
 
 \section{Numerical Method}
 
+The numerical method used in this project is the Dormand-Prince method, given by
+
 \begin{equation} \label{eq:RK4}
-\mathrm y_{i+1} = y_i+(\frac{37}{387}k_1+\frac{250}{621}k_3+\frac{125}{594}k_4+\frac{512}{1771}k_6)h
+y_{i+1}^{(4)} = y_i + h\left(
+    \frac{5179}{57600}k_1
+  + \frac{7571}{16695}k_3
+  + \frac{393}{640}k_4
+  - \frac{92097}{339200}k_5
+  + \frac{187}{2100}k_6
+  + \frac{1}{40}k_7
+\right)
 \end{equation}
 
 \begin{equation} \label{eq:RK5}
-\mathrm y_{i+1} = y_i+(\frac{2825}{27648}k_1+\frac{18575}{48384}k_3+\frac{13525}{55296}k_4+\frac{277}{14336}k_5+\frac{1}{4}k_6)h
+y_{i+1}^{(5)} = y_i + h\left(
+    \frac{35}{384}k_1
+  + \frac{500}{1113}k_3
+  + \frac{125}{192}k_4
+  - \frac{2187}{6784}k_5
+  + \frac{11}{84}k_6
+\right)
 \end{equation}
 
 \noindent where\\
-\indent $y_i$ is the function evaluation at interval $i$\\
-\indent $k_i$ is the slope along each interval $i$\\
+\indent $y_i$ is the function evaluation at interval $i$,\\
+\indent $k_i$ is the slope along each interval $i$,\\
 \indent $h$ is the step size\\
 
-The numerical method used in this project is the Runge-Kutta-Fehldberg method, also known as RK45. This method solves the ODE
+This method solves the ODE
 using Eq. \ref{eq:RK5}, and the error is found by finding the difference between this solution and the solution using
-Eq. \ref{eq:RK4}. The value of each $k$ coefficient is unique. 
+Eq. \ref{eq:RK4}. The value of each $k$ coefficient is given by
 
 \begin{equation} \label{eq:k1}
 \mathrm k_1=f(x_i,y_i)
 \end{equation}
 
 \begin{equation} \label{eq:k2}
-\mathrm k_2=f(x_i+\frac{1}{5}h,y_i+\frac{1}{5}k_1h)
+\mathrm k_2=f\left(x_i + \frac{1}{5}h,\;
+                    y_i + \frac{1}{5}k_1 h\right)
 \end{equation}
 
 \begin{equation} \label{eq:k3}
-\mathrm k_3=f(x_i+\frac{3}{10}h,y_i+\frac{3}{40}k_1h+\frac{9}{40}k_2h)
+\mathrm k_3=f\left(x_i + \frac{3}{10}h,\;
+                    y_i + \frac{3}{40}k_1 h + \frac{9}{40}k_2 h\right)
 \end{equation}
 
 \begin{equation} \label{eq:k4}
-\mathrm k_4=f(x_i+\frac{3}{5}h,y_i+\frac{3}{10}k_1h-\frac{9}{10}k_2h+\frac{6}{5}k_3h)
+\mathrm k_4=f\left(x_i + \frac{4}{5}h,\;
+                    y_i + \frac{44}{45}k_1 h
+                        - \frac{56}{15}k_2 h
+                        + \frac{32}{9}k_3 h\right)
 \end{equation}
 
 \begin{equation} \label{eq:k5}
-\mathrm k_5=f(x_i+h,y_i-\frac{11}{54}k_1h+\frac{5}{2}k_2h-\frac{70}{27}k_3h+\frac{35}{27}k_4h)
+\mathrm k_5=f\left(x_i + \frac{8}{9}h,\;
+                    y_i + \frac{19372}{6561}k_1 h
+                        - \frac{25360}{2187}k_2 h
+                        + \frac{64448}{6561}k_3 h
+                        - \frac{212}{729}k_4 h\right)
 \end{equation}
 
 \begin{equation} \label{eq:k6}
-\mathrm k_6=f(x_i+\frac{7}{8}h,y_i=\frac{1631}{55296}k_1h+\frac{175}{512}k_2h+\frac{575}{13824}k_3h+\frac{44275}{110592}k_4h+\frac{253}{4096}k_5h)
+\mathrm k_6=f\left(x_i + h,\;
+                    y_i + \frac{9017}{3168}k_1 h
+                        - \frac{355}{33}k_2 h
+                        + \frac{46732}{5247}k_3 h
+                        + \frac{49}{176}k_4 h
+                        - \frac{5103}{18656}k_5 h\right)
 \end{equation}
 
-\noindent Eq. \ref{eq:k1} through Eq. \ref{eq:k6} expand each $k$ value to define the terms used in the RK45 method. The ODEs
+\begin{equation} \label{eq:k7}
+\mathrm k_7=f\left(x_i + h,\;
+                    y_i + \frac{35}{384}k_1 h
+                        + \frac{500}{1113}k_3 h
+                        + \frac{125}{192}k_4 h
+                        - \frac{2187}{6784}k_5 h
+                        + \frac{11}{84}k_6 h\right)
+\end{equation}
+
+
+\noindent Eq. \ref{eq:k1} through Eq. \ref{eq:k7} expand each $k$ value to define the terms used in the Dormand-Prince method. The ODEs
 will be solved over a range of time values to generate a list of data points. These data points encompass a range of position as
 well as velocity for each ODE.
 
@@ -462,10 +507,8 @@ well as velocity for each ODE.
 
 The purpose of the sensitivity analysis conducted for the rotorcraft prototype is to observe changes in surface ceiling and TTC 
 when the turboshaft engine power rating is changed. This knowledge is important for the determination of the final turboshaft
-engine choice for the rotorcraft design.
-
-The power rating of the turboshaft engine will be increased and decreased at a steady rate to observe fluctuation in surface
-ceiling and TTC. Oberving a linear or non-linear change will be essential in limiting any changes in the current engine rating.
+engine choice for the rotorcraft design. The power rating of the turboshaft engine will be increased and decreased at a steady rate to observe fluctuation in surface
+ceiling and TTC.
 
 \chapter{Application} 
 
@@ -616,23 +659,27 @@ Time-to-Climb $TTC$ ($min$) & 24.4 \\
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{images/results.png}
-    \caption{Service ceiling and rate of climb variation with time.}
+    \caption{At the critical VROC of 0.51 $\frac{m}{s}$, the service ceiling is found to be 5118 m.}
     \label{fig:results}
 \end{figure}
 
-The service ceiling of the SRS rotorcraft protoype is listed in Table \ref{table:results}. The corresponding time to climb to this
-altitude is also listed. Variation of VROC and altitude over time can be visualized in Fig. \ref{fig:results}.
+The service ceiling of the SRS rotorcraft protoype was found to be 5118 meters, listed in Table \ref{table:results}.
+The corresponding time to climb to this altitude was found to be 24.4 minutes, also listed in Table \ref{table:results}.
+Variation of VROC and altitude over time can be visualized in Fig. \ref{fig:results}.
 
 \subsection{Sensitivity Analysis}
 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{images/sa.png}
-    \caption{Sensitivity Analysis of service ceiling and TTC with varying sea level turboshaft power.}
+    \caption{Service ceiling has a near linear relationship with change in sea level turboshaft power, while TTC is nonlinear.}
     \label{fig:sa}
 \end{figure}
 
-Sensitivity of service ceiling and TTC can be observed in Fig. \ref{fig:sa} when sea level turboshaft power is varied.
+Sensitivity of service ceiling and TTC can be observed in Fig. \ref{fig:sa}. Sea level turboshaft power is varied by 
+$\pm20\%$ in this sensitivity analysis. The service ceiling and TTC have non-linear relationships to change in sea level
+turboshaft power. It can be observed in Fig. \ref{fig:sa} that the service ceiling's negative slope increases as
+turboshaft power is decreased. 
 
 \section{Discussion}
 This section discusses all results found throughout the project, including primary results, sensitivity analysis, and sources
@@ -641,13 +688,11 @@ of error.
 \subsection{Results}
 
 It can be observed that the service ceiling and TTC listed in Table \ref{table:results} are very reasonable and realistic
-values. When compared to other light duty helicopters such as the MD Helicopters MD500, the service ceiling is comparable
-and competitive in the light duty rotorcraft market \cite{md500}.
+values. The prototype service ceiling of 5118 meters can be compared to other light duty helicopter service ceilings, such as the
+MD Helicopters MD500E. This helicopter has a service ceiling of 4877 meters \cite{md500}, which indicates that the prototype
+has a service ceiling that is competitive in the light duty helicopter market.
 
 \subsection{Sensitivity Analysis}
-
-The service ceiling and TTC have non-linear relationships to change in sea level turboshaft power. It can be observed in
-Fig. \ref{fig:sa} that the service ceiling's negative slope increases as turboshaft power is decreased. 
 
 TTC is at its maximum around the original, unchanged area. When turboshaft power is both increased and decreased, TTC decreases
 in both directions. It must be noted though, that the decrease in TTC as service ceiling decreases is due to the fact that it
@@ -660,15 +705,16 @@ The specifications provided by Summit Rotorcraft Systems in Table \ref{table:hel
 been acquired through simulation and experimentation. These parameters are subject to experimental errors that cannot be
 determined by this project, and must instead be provided by SRS.
 
-The limitations of the math model are potential for calculation error. The precision of the results of each calculation can
-decrease as further calculations progress.
+The limitations of the math model are potential for calculation error. While it does account for all basic helicopter specifications,
+it does not account for dynamic changes in certain parameters, such as weight decrease from fuel consumption, flaws in rotor
+geometry, drag from the fuselage, and wind.
 
-Another possible source of error is the error of the RK45 method. This error can be determined by the difference between the
-ODE solution from Eq. \ref{eq:RK5} and the solution from Eq. \ref{eq:RK4}.
+Another possible source of error is the truncation error of the Dormand-Prince method. This error can be determined by the difference between the
+ODE solution from Eq. \ref{eq:RK5} and the solution from Eq. \ref{eq:RK4}. Due to the adaptive nature of the method, though,
+the truncation error will have minimal impact on final results.
 
-Round off error is also a source of error in this project. Service ceiling is rounded to four significant figures, and
-TTC is rounded to three signifcant figures. This error also progresses through each calculation as the computer rounds values
-for each calculation step.
+Round off error is also a source of error from the Dormand-Prince method. As the numerical method progresses in iterations,
+floating-point round off occurs during calculation which has the potential to cause measurable error.
 
 
 \subsection{Recommendations}
@@ -677,9 +723,9 @@ The following recommendations are presented.
 
 \begin{itemize}
     \item Ensure the rotorcraft protoype specifications receive minimal change to stay within the acceptable service ceiling and
-    TTC calculations.
-    \item Consider sources of error, primarily experimental errors, when live testing begins to successfully compensate for any
-    difference in actual results from computational model results.
+    TTC calculations of 5118 meters and 24.4 minutes, respectively.
+    \item Consider sources of error, primarily experimental errors, when live testing begins by allowing a tolerance in
+    specifications that still meet performance requirements.
 \end{itemize}
 
 \chapter{Conclusions \& Recommendations}
@@ -690,14 +736,14 @@ This section describes final conclusions from the project, as well as a final pr
 
 A computational model has been developed to determine rotorcraft service ceiling and time-to-climb (TTC) based on provided
 rotorcraft specifications and ISA standard atmospheric conditions \cite{ISA}. Final service ceiling and TTC calculations of the
-Summit Rotorcraft Systems prototype are displayed in Table \ref{table:results}. The following objectives have been met throughout
-the development of these calculations.
+Summit Rotorcraft Systems prototype are found to be 5118 meters and 24.4 minutes, respectively, found in Table \ref{table:results}.
+The following objectives have been met throughout the development of these calculations.
 
 \begin{enumerate}
     \item \textit{Steady State VROC} Determine steady state VROC as a function of altitude.
     \item \textit{First Order ODEs} Determine first order ODEs from the second order climb dynamics ODE.
-    \item \textit{Altitudes and VROCs} Use the Runge-Kutta-Fehldberg method to find altitude and VROC values that change with time.
-    \item \textit{Service Ceiling} Determine service ceiling from VROC and altitude results.
+    \item \textit{Altitudes and VROCs} Use the Dormand-Prince method to find altitude and VROC values that change with time.
+    \item \textit{Service Ceiling} Determine the service ceiling from VROC and altitude results.
     \item \textit{Dynamic TTC} Record the corresponding TTC from elapsed time to reach service ceiling.
 \end{enumerate}
 
@@ -707,9 +753,9 @@ The following recommendations are presented.
 
 \begin{itemize}
     \item Ensure the rotorcraft protoype specifications receive minimal change to stay within the acceptable service ceiling and
-    TTC calculations.
-    \item Consider sources of error, primarily experimental errors, when live testing begins to successfully compensate for any
-    difference in actual results from computational model results.
+    TTC calculations of 5118 meters and 24.4 minutes, respectively.
+    \item Consider sources of error, primarily experimental errors, when live testing begins by allowing a tolerance in
+    specifications that still meet performance requirements.
 \end{itemize}
 
 
