@@ -512,7 +512,7 @@ ceiling and TTC.
 
 \chapter{Application} 
 
-This section will primarily expand upon the math model and the RK45 method by introducing relevant parameters for calculations.
+This section will primarily expand upon the math model and the Dormand-Prince method by introducing relevant parameters for calculations.
 
 \section{Math Model Parameters and Values}
 
@@ -805,8 +805,8 @@ The following recommendations are presented.
 \renewcommand{\arraystretch}{1.25}
 \begin{tabular}{l l l}
 \hline\hline
-\multicolumn{1}{c}{RK45 Method} &
-\multicolumn{1}{c}{RK23 Method} & 
+\multicolumn{1}{c}{Project Results} &
+\multicolumn{1}{c}{Scilab Results} & 
 \multicolumn{1}{c}{Relative Error (\%)} \\
 \hline
 Service Ceiling = 5118 m & Service Ceiling = 5118 m & 0 \\
@@ -816,10 +816,10 @@ TTC = 24.4 min & TTC = 24.4 min & 0 \\
 \normalsize
 \end{table}
 
-This project was verified through the use of the SciPy \cite{scipy} function $integrate.solve\_ivp$ using the $RK23$ method
-\cite{rk23}. The function solves the climb dynamics ODE found in Eq. \ref{eq:ode}, which is originally solved in the project
-by the $RK45$ method \cite{fehlberg,dormandprince}. Both methods resulted in the exact same service ceiling and TTC
-calculations, seen in Table \ref{table:verify}.
+This project was verified in Scilab via the $RKF$ ODE solver. This solver utilizes the Dormand-Prince method to solve a given
+ODE. A Scilab script was created that utilizes the project math model and the ODE solver to generate a solution, ensuring
+the project progam works as it should. The results of the Scilab program were identical to the Python program used for the
+project, seen in Table \ref{table:verify}
 
 \newpage
 \begin{landscape}  % code is presented in landscape
