@@ -214,16 +214,16 @@ this critical value ensures that the rotorcraft can maintain a safe level of man
 increases, which implies that critical VROC is the detemining factor for the maximum safe altitude the rotorcraft can operate at. This
 maximum altitude is known as a rotorcraft's service ceiling.
 
-Jason Cowper is requesting a computational model that can predict the service ceiling of the new rotorcraft protoype. This model will
-calculate the prototype's service ceiling, as well as the time that will elapse to dynamically approach this service ceiling, named as 
+Jason Cowper has requested a computational model that can predict the service ceiling of the new rotorcraft protoype. This model 
+calculates the prototype's service ceiling, as well as the time that will elapse to dynamically approach this service ceiling, named as 
 time-to-climb (TTC).
 
-The model will first receive inputs of the protoype helicopter's specifications developed by SRS. It will then utilize known International
+The model first receives inputs of the protoype helicopter's specifications developed by SRS. It then utilizes known International
 Standard Atmosphere (ISA) parameters to calculate density, required turbine power, and available turbine power, all varying with altitude.
-It will then use these calculations to determine a steady state VROC which can be utilized for climb dynamics.
+It then uses these calculations to determine a steady state VROC which can be utilized for climb dynamics.
 
-The climb dynamics algorithm will be solved by the Dormand-Prince method to generate a set of altitudes, with corresponding
-VROC values, which vary with time. The service ceiling will be determined by finding the altitude that has a corresponding VROC that has
+The climb dynamics algorithm is solved by the Dormand-Prince method to generate a set of altitudes, with corresponding
+VROC values, which vary with time. The service ceiling is determined by finding the altitude that has a corresponding VROC that has
 decreased to the critical rate value determined for this rotorcraft. The TTC corresponding with service ceiling is also found from this
 service ceiling determination.
 
@@ -239,8 +239,8 @@ recommended to continue with development plans of the prototype using current sp
 
 \newpage
 % optional: You could include an Acknowledgements section where you acknowledge those that have assisted you. 
-\chapter*{Forward}
-\addcontentsline{toc}{section}{Forward}
+\chapter*{Foreword}
+\addcontentsline{toc}{section}{Foreword}
 
 This project was chosen to provide an opportunity to gain more experience in mathematical computations for an aerospace
 application. The physical behavior of a rotorcraft, and the ability to create a mathematical model of said behavior, is
@@ -253,7 +253,7 @@ behavior model for basic predictions. These predictions can be extremely valuabl
 \setcounter{page}{1} % set the page number appropriately
 
 \chapter{Introduction}
-The Introduction Section provides an overview of the problem, with relevant objectives and reasoning for solving.
+The Introduction Section provides an overview of the problem, with relevant objectives and motivation.
 \section{Overview of the Problem} 
 Summit Rotorcraft Systems (SRS) is a helicopter manufacturer developing a new model prototype. This prototype is required to
 adhere to the rigorous performance regulations enforced by the Federal Aviation Administration (FAA). A primary performance
@@ -687,7 +687,7 @@ of error.
 
 \subsection{Results}
 
-It can be observed that the service ceiling and TTC listed in Table \ref{table:results} are very reasonable and realistic
+It can be observed that the service ceiling and TTC listed in Table \ref{table:results} are realistic
 values. The prototype service ceiling of 5118 meters can be compared to other light duty helicopter service ceilings, such as the
 MD Helicopters MD500E. This helicopter has a service ceiling of 4877 meters \cite{md500}, which indicates that the prototype
 has a service ceiling that is competitive in the light duty helicopter market.
